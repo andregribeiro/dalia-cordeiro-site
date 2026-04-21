@@ -1,0 +1,61 @@
+---
+import type { Lang } from '../lib/i18n';
+import { t } from '../lib/i18n';
+import { loc } from '../lib/helpers';
+import { urlFor } from '../lib/sanity';
+import type { Artwork, LocalizedString } from '../lib/types';
+
+interface Props {
+  lang: Lang;
+  headline: LocalizedString;
+  tagline: LocalizedString;
+  featured?: Artwork;
+}
+
+const { lang, headline, tagline, featured } = Astro.props;
+
+const heroText = loc(headline, lang);
+const taglineText = loc(tagline, lang);
+const introText = t(lang, 'intro');
+
+// Split headline for the <em> styling: wrap the second word in <em>
+// Original: "Bodies that refuse to stay put." / "Corpos que se recusam a ficar quietos."
+// We'll render the full text and let the page handle emphasis via markup in the CMS field.
+// For now, render as-is.
+
+const featuredImgUrl = featured
+  ? urlFor(featured.image).width(800).auto('format').url()
+  : '';
+---
+
+<section class="hero wrap">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-meta">{taglineText}</div>
+      <h1 set:html={heroText} />
+      <p class="intro">{introText}</p>
+      <a class="hero-cta" href="#works">
+        {t(lang, 'view_works')}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M13 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+    {featured && (
+      <div>
+        <div class="hero-featured">
+          <img
+            src={featuredImgUrl}
+            alt={loc(featured.image?.alt, lang) || featured.title}
+            width="800"
+            height="1000"
+          />
+        </div>
+        <div class="hero-featured-cap">
+          <span><em>{featured.title}</em> &nbsp;·&nbsp; {loc(featured.medium, lang)}</span>
+          <span>{featured.year}</span>
+        </div>
+      </div>
+    )}
+  </div>
+</section>

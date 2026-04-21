@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ContactForm from '../../components/ContactForm';
+import { client } from '../../lib/sanity';
+import { siteSettingsQuery } from '../../lib/queries';
+import type { SiteSettings } from '../../lib/types';
+import { loc } from '../../lib/helpers';
+import { t } from '../../lib/i18n';
+
+const lang = 'pt' as const;
+
+const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
+const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || '';
+---
+
+<Base lang={lang} title={`${t(lang, 'contact_title')} — Dália Cordeiro`}>
+  <Header lang={lang} active="contact" instagramUrl={settings?.instagramUrl} />
+
+  <section class="contact wrap" id="contact">
+    <div>
+      <h2>{t(lang, 'contact_title')} — <em>falemos</em>.</h2>
+      <p class="sub">{t(lang, 'contact_sub')}</p>
+      <div class="direct">
+        <div><a href={`mailto:${settings?.contactEmail || 'studio@daliacordeiro.art'}`}>{settings?.contactEmail || 'studio@daliacordeiro.art'}</a></div>
+        <div style="margin-top:10px">
+          <a href={settings?.instagramUrl || 'https://www.instagram.com/dalia_cordeiro_art/'} target="_blank" rel="noreferrer">@dalia_cordeiro_art</a>
+        </div>
+      </div>
+    </div>
+    <ContactForm client:load lang={lang} accessKey={accessKey} />
+  </section>
+
+  <Footer lang={lang} studioLocation={settings?.studioLocation} footerText={settings?.footerText} instagramUrl={settings?.instagramUrl} />
+</Base>

@@ -1,0 +1,52 @@
+---
+import type { Lang } from '../lib/i18n';
+import { routes, getAlternateLang } from '../lib/i18n';
+import '../styles/global.css';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { lang, title, description, ogImage } = Astro.props;
+const altLang = getAlternateLang(lang);
+
+const currentPath = Astro.url.pathname;
+const altRoutes = routes[altLang];
+const curRoutes = routes[lang];
+
+let altUrl = currentPath;
+if (currentPath === curRoutes.home) altUrl = altRoutes.home;
+else if (currentPath === curRoutes.about) altUrl = altRoutes.about;
+else if (currentPath === curRoutes.contact) altUrl = altRoutes.contact;
+---
+
+<!doctype html>
+<html lang={lang === 'pt' ? 'pt-PT' : 'en'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+
+    <!-- hreflang -->
+    <link rel="alternate" hreflang={lang === 'pt' ? 'pt-PT' : 'en'} href={currentPath} />
+    <link rel="alternate" hreflang={altLang === 'pt' ? 'pt-PT' : 'en'} href={altUrl} />
+    <link rel="alternate" hreflang="x-default" href={routes.pt.home} />
+
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/intertight-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="theme-paper accent-coral grid-regular">
+    <slot />
+  </body>
+</html>

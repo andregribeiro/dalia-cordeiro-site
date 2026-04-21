@@ -1,0 +1,23 @@
+{
+  "name": "web",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.9.3",
+    "@astrojs/react": "^4.3.1",
+    "@astrojs/sitemap": "^3.3.1",
+    "@sanity/client": "^7.3.0",
+    "@sanity/image-url": "^1.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5",
+    "typescript": "^5.8.3"
+  }
+}

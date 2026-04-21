@@ -1,0 +1,21 @@
+{
+  "name": "dalia-cordeiro-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:web": "pnpm --filter web dev",
+    "dev:studio": "pnpm --filter studio dev",
+    "build:web": "pnpm --filter web build",
+    "build:studio": "pnpm --filter studio build"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  },
+  "dependencies": {
+    "@sanity/client": "^7.21.0",
+    "dotenv": "^17.4.2"
+  }
+}

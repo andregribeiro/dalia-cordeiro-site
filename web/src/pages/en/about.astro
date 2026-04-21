@@ -1,0 +1,70 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { client, urlFor } from '../../lib/sanity';
+import { aboutQuery, siteSettingsQuery } from '../../lib/queries';
+import type { About, SiteSettings } from '../../lib/types';
+import { loc } from '../../lib/helpers';
+import { t } from '../../lib/i18n';
+
+const lang = 'en' as const;
+
+const about = await client.fetch<About>(aboutQuery);
+const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
+
+const portraitUrl = about?.portrait ? urlFor(about.portrait).width(800).auto('format').url() : '';
+
+function blocksToText(blocks: any[] | undefined): string[] {
+  if (!blocks) return [];
+  return blocks
+    .filter((b: any) => b._type === 'block')
+    .map((b: any) => b.children?.map((c: any) => c.text).join('') ?? '');
+}
+
+const bioParas = blocksToText(about?.longBio?.[lang] ?? about?.longBio?.pt);
+---
+
+<Base lang={lang} title={`${t(lang, 'about_title')} — Dália Cordeiro`} description={loc(about?.shortBio, lang)}>
+  <Header lang={lang} active="about" instagramUrl={settings?.instagramUrl} />
+
+  <section class="about wrap" id="about">
+    <div class="about-portrait">
+      {portraitUrl && (
+        <img src={portraitUrl} alt="Dália Cordeiro" width="800" height="1000" />
+      )}
+      <div class="portrait-caption">The artist in the studio</div>
+    </div>
+    <div>
+      <h2>{t(lang, 'about_title')} — <em>Dália Cordeiro</em></h2>
+      {bioParas.map((p) => <p>{p}</p>)}
+
+      {about?.stats && about.stats.length > 0 && (
+        <dl class="about-stats">
+          {about.stats.map((s) => (
+            <div>
+              <dt>{loc(s.label, lang)}</dt>
+              <dd>{loc(s.value, lang)}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      {about?.selectedShows && about.selectedShows.length > 0 && (
+        <div class="about-sel">
+          <div class="about-sel-label">Selected</div>
+          <ul>
+            {about.selectedShows.map((show) => (
+              <li>
+                <span class="y">{show.year}</span>
+                <span class="t">{loc(show.title, lang)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer lang={lang} studioLocation={settings?.studioLocation} footerText={settings?.footerText} instagramUrl={settings?.instagramUrl} />
+</Base>

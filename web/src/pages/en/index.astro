@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Hero from '../../components/Hero.astro';
+import Footer from '../../components/Footer.astro';
+import WorkGrid from '../../components/WorkGrid';
+import { client, urlFor } from '../../lib/sanity';
+import { siteSettingsQuery, allArtworksQuery } from '../../lib/queries';
+import type { SiteSettings, Artwork } from '../../lib/types';
+import { loc } from '../../lib/helpers';
+
+const lang = 'en' as const;
+
+const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
+const artworks = await client.fetch<Artwork[]>(allArtworksQuery);
+
+const description = loc(settings?.tagline, lang) || 'Painter — Porto, Portugal';
+
+// Pre-compute image URLs server-side (card thumbnails)
+const imageUrls: Record<string, string> = {};
+for (const aw of artworks) {
+  imageUrls[aw._id] = urlFor(aw.image).width(600).auto('format').url();
+}
+---
+
+<Base lang={lang} title={`Dália Cordeiro — ${description}`} description={description}>
+  <Header lang={lang} active="works" instagramUrl={settings?.instagramUrl} />
+  <Hero
+    lang={lang}
+    headline={settings?.heroHeadline}
+    tagline={settings?.tagline}
+    featured={settings?.heroArtwork}
+  />
+  <WorkGrid
+    client:load
+    lang={lang}
+    artworks={artworks}
+    imageUrls={imageUrls}
+    sectionTitle="<em>Works</em>, 2022 — 2026"
+    contactUrl="/en/contact"
+  />
+  <Footer lang={lang} studioLocation={settings?.studioLocation} footerText={settings?.footerText} instagramUrl={settings?.instagramUrl} />
+</Base>

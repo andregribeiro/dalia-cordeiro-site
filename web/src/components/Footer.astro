@@ -1,0 +1,26 @@
+---
+import type { Lang } from '../lib/i18n';
+import type { LocalizedString } from '../lib/types';
+
+interface Props {
+  lang: Lang;
+  studioLocation?: LocalizedString;
+  footerText?: LocalizedString;
+  instagramUrl?: string;
+}
+
+const { lang, studioLocation, footerText, instagramUrl = 'https://www.instagram.com/dalia_cordeiro_art/' } = Astro.props;
+
+function loc(field: LocalizedString | undefined, fallback: string): string {
+  if (!field) return fallback;
+  return field[lang] || field.pt || fallback;
+}
+---
+
+<footer class="wrap">
+  <div>{loc(studioLocation, lang === 'pt' ? 'Atelier — Porto, Portugal' : 'Studio — Porto, Portugal')}</div>
+  <div>
+    <a class="ig-link" href={instagramUrl} target="_blank" rel="noreferrer">@dalia_cordeiro_art</a>
+  </div>
+  <div>{loc(footerText, lang === 'pt' ? '© 2026 Dália Cordeiro. Todas as obras © a artista.' : '© 2026 Dália Cordeiro. All works © the artist.')}</div>
+</footer>
