@@ -2,7 +2,7 @@
 
 Portfolio website for **Dalia Cordeiro**, a Portuguese visual artist working in oil, pastel and mixed media.
 
-Live: https://dalia-cordeiro.pages.dev
+**Status**: Not publicly deployed. See [Workflow docs](docs/WORKFLOW.md) for how to build and deploy.
 
 ## Architecture
 
@@ -117,9 +117,6 @@ pnpm dev:studio
 
 # Build static site
 pnpm build:web
-
-# Deploy to Cloudflare Pages
-wrangler pages deploy web/dist --project-name dalia-cordeiro
 ```
 
 ### Environment Variables
@@ -130,8 +127,34 @@ Copy `.env.example` to `.env` and fill in:
 |----------|-------------|
 | `SANITY_PROJECT_ID` | Sanity project ID (`gwtbwm5k`) |
 | `SANITY_DATASET` | Dataset name (`production`) |
-| `SANITY_API_TOKEN` | API token with editor permissions |
+| `SANITY_API_TOKEN` | API token with editor permissions (only needed for migration script) |
 | `PUBLIC_WEB3FORMS_KEY` | Web3Forms access key for contact form |
+
+## Deploy
+
+The site is deployed to **Cloudflare Pages** as a static site. There are two ways to deploy:
+
+### Manual
+
+```bash
+pnpm build:web
+wrangler pages deploy web/dist --project-name dalia-cordeiro
+```
+
+If the Cloudflare Pages project doesn't exist, `wrangler` creates it automatically with a public `*.pages.dev` URL.
+
+### CI/CD (GitHub Actions)
+
+A workflow in `.github/workflows/deploy.yml` auto-deploys on push to `main` and on `repository_dispatch` events (for Sanity webhook integration).
+
+**Required GitHub secrets:**
+
+| Secret | Description |
+|--------|-------------|
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API token with Pages edit permission |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
+
+See [docs/WORKFLOW.md](docs/WORKFLOW.md) for the full content management and deploy workflow.
 
 ## Migration Script
 

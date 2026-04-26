@@ -5,4 +5,5 @@ export default defineCliConfig({
     projectId: 'gwtbwm5k',
     dataset: 'production',
   },
+  studioHost: 'dalia-cordeiro',
 });
