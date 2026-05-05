@@ -22,6 +22,6 @@ export const aboutQuery = `
   *[_id == "about"][0] {
     portrait, shortBio, longBio,
     birthplace, birthYear,
-    stats, selectedShows, bibliography
+    stats, bibliography
   }
 `;

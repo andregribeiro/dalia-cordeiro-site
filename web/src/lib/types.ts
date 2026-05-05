@@ -31,12 +31,6 @@ export interface AboutStat {
   value: LocalizedString;
 }
 
-export interface SelectedShow {
-  _key: string;
-  year: string;
-  title: LocalizedString;
-}
-
 export interface BibliographyEntry {
   _key: string;
   year: string;
@@ -52,7 +46,6 @@ export interface About {
   birthplace: string;
   birthYear: number;
   stats: AboutStat[];
-  selectedShows: SelectedShow[];
   bibliography?: BibliographyEntry[];
 }
 

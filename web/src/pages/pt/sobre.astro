@@ -55,41 +55,24 @@ const bioParas = blocksToText(about?.longBio?.[lang] ?? about?.longBio?.pt);
       </dl>
     )}
 
-    {((about?.selectedShows && about.selectedShows.length > 0) || (about?.bibliography && about.bibliography.length > 0)) && (
-      <div class="about-extras">
-        {about?.selectedShows && about.selectedShows.length > 0 && (
-          <div class="about-sel">
-            <ul>
-              {about.selectedShows.map((show) => (
-                <li>
-                  <span class="y">{show.year}</span>
-                  <span class="t">{loc(show.title, lang)}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {about?.bibliography && about.bibliography.length > 0 && (
-          <div class="about-bib">
-            <div class="about-sel-label">Bibliografia</div>
-            <ul>
-              {about.bibliography.map((entry) => (
-                <li>
-                  <span class="y">{entry.year}</span>
-                  <div>
-                    {entry.url ? (
-                      <a class="t" href={entry.url} target="_blank" rel="noreferrer">{loc(entry.title, lang)}</a>
-                    ) : (
-                      <span class="t">{loc(entry.title, lang)}</span>
-                    )}
-                    {loc(entry.description, lang) && <p class="d">{loc(entry.description, lang)}</p>}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+    {about?.bibliography && about.bibliography.length > 0 && (
+      <div class="about-bib">
+        <div class="about-section-label">Bibliografia</div>
+        <ul>
+          {about.bibliography.map((entry) => (
+            <li>
+              <span class="y">{entry.year}</span>
+              <div>
+                {entry.url ? (
+                  <a class="t" href={entry.url} target="_blank" rel="noreferrer">{loc(entry.title, lang)}</a>
+                ) : (
+                  <span class="t">{loc(entry.title, lang)}</span>
+                )}
+                {loc(entry.description, lang) && <p class="d">{loc(entry.description, lang)}</p>}
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     )}
   </section>
