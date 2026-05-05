@@ -10,16 +10,24 @@ export interface LocalizedText {
   en?: string;
 }
 
+export interface Series {
+  _id: string;
+  key: string;
+  title: LocalizedString;
+  medium?: LocalizedString;
+  description?: LocalizedText;
+  displayOrder: number;
+}
+
 export interface Artwork {
   _id: string;
-  title: string;
-  slug: { current: string };
+  code: string;
   image: SanityImageSource & { alt?: LocalizedString };
   additionalImages?: Array<SanityImageSource & { alt?: LocalizedString }>;
   year: number;
   medium: LocalizedString;
   dimensions: { cm: string; in: string };
-  series: string;
+  series: Series;
   status: 'available' | 'sold' | 'reserved' | 'nfs';
   description: LocalizedText;
   displayOrder: number;

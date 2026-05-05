@@ -79,15 +79,6 @@ export const ui = {
   },
 } as const;
 
-/** Series translation dict (static — few fixed values) */
-export const seriesNames: Record<string, Record<Lang, string>> = {
-  Metamorphoses: { en: 'Metamorphoses', pt: 'Metamorfoses' },
-  'Works on Paper': { en: 'Works on Paper', pt: 'Obras Sobre Papel' },
-  'Saints & Weeds': { en: 'Saints & Weeds', pt: 'Santas e Ervas' },
-  Portraits: { en: 'Portraits', pt: 'Retratos' },
-  Bestiary: { en: 'Bestiary', pt: 'Bestiário' },
-};
-
 type UiKey = keyof typeof ui.pt;
 
 export function t(lang: Lang, key: UiKey): string {

@@ -6,16 +6,18 @@ export const artwork = defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'title',
-      title: 'Título',
+      name: 'code',
+      title: 'Código (referência)',
+      description: 'Identificador curto e único da obra (ex: M-001). Usado para referências em emails de clientes — as obras não têm nome.',
       type: 'string',
       validation: (r) => r.required(),
     }),
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: { source: 'title', maxLength: 96 },
+      name: 'series',
+      title: 'Série',
+      description: 'A série a que esta obra pertence. O nome, técnica e descrição da série são herdados a menos que sejam substituídos abaixo.',
+      type: 'reference',
+      to: [{ type: 'series' }],
       validation: (r) => r.required(),
     }),
     defineField({
@@ -57,12 +59,6 @@ export const artwork = defineType({
       validation: (r) => r.required().min(1950).max(2100),
     }),
     defineField({
-      name: 'medium',
-      title: 'Técnica',
-      type: 'localizedString',
-      validation: (r) => r.required(),
-    }),
-    defineField({
       name: 'dimensions',
       title: 'Dimensões',
       type: 'object',
@@ -72,18 +68,16 @@ export const artwork = defineType({
       ],
     }),
     defineField({
-      name: 'series',
-      title: 'Série',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Metamorfoses', value: 'Metamorphoses' },
-          { title: 'Obras Sobre Papel', value: 'Works on Paper' },
-          { title: 'Santas e Ervas', value: 'Saints & Weeds' },
-          { title: 'Retratos', value: 'Portraits' },
-          { title: 'Bestiário', value: 'Bestiary' },
-        ],
-      },
+      name: 'mediumOverride',
+      title: 'Técnica (substitui a série)',
+      description: 'Opcional. Só preencher se esta obra usa uma técnica diferente da série.',
+      type: 'localizedString',
+    }),
+    defineField({
+      name: 'descriptionOverride',
+      title: 'Descrição (substitui a série)',
+      description: 'Opcional. Só preencher se esta obra precisa de uma descrição própria, distinta da série.',
+      type: 'localizedText',
     }),
     defineField({
       name: 'status',
@@ -99,11 +93,6 @@ export const artwork = defineType({
         layout: 'radio',
       },
       initialValue: 'available',
-    }),
-    defineField({
-      name: 'description',
-      title: 'Descrição',
-      type: 'localizedText',
     }),
     defineField({
       name: 'displayOrder',
@@ -125,11 +114,17 @@ export const artwork = defineType({
     },
   ],
   preview: {
-    select: { title: 'title', year: 'year', media: 'image', status: 'status' },
-    prepare({ title, year, media, status }) {
+    select: {
+      code: 'code',
+      year: 'year',
+      media: 'image',
+      status: 'status',
+      seriesTitle: 'series.title.pt',
+    },
+    prepare({ code, year, media, status, seriesTitle }) {
       return {
-        title: title || 'Sem título',
-        subtitle: `${year ?? '—'} · ${status ?? ''}`,
+        title: code || 'Sem código',
+        subtitle: `${seriesTitle ?? '—'} · ${year ?? '—'} · ${status ?? ''}`,
         media,
       };
     },

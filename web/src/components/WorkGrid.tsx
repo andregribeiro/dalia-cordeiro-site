@@ -1,9 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import type { Artwork, LocalizedString, LocalizedText } from '../lib/types';
 import type { Lang } from '../lib/i18n';
-import { seriesNames } from '../lib/i18n';
 
-// Re-export ui translations needed client-side
 const ui = {
   pt: {
     filter_series: 'Série',
@@ -17,6 +15,7 @@ const ui = {
     dimensions: 'Dimensões',
     year: 'Ano',
     series: 'Série',
+    code: 'Referência',
     availability: 'Disponibilidade',
     inquire: 'Pedir informação sobre esta obra',
     close: 'Fechar',
@@ -34,6 +33,7 @@ const ui = {
     dimensions: 'Dimensions',
     year: 'Year',
     series: 'Series',
+    code: 'Reference',
     availability: 'Availability',
     inquire: 'Inquire about this work',
     close: 'Close',
@@ -59,28 +59,27 @@ interface Props {
 }
 
 export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, contactUrl }: Props) {
-  const [series, setSeries] = useState('all');
+  const [seriesKey, setSeriesKey] = useState('all');
   const [status, setStatus] = useState('all');
   const [openWork, setOpenWork] = useState<Artwork | null>(null);
 
   const allSeries = useMemo(() => {
-    const seen = new Set<string>();
-    return artworks
-      .map((w) => w.series)
-      .filter((s) => {
-        if (!s || seen.has(s)) return false;
-        seen.add(s);
-        return true;
-      })
-      .map((key) => ({
-        key,
-        label: seriesNames[key]?.[lang] ?? key,
-      }));
+    const seen = new Map<string, { key: string; label: string; order: number }>();
+    for (const w of artworks) {
+      const s = w.series;
+      if (!s?.key || seen.has(s.key)) continue;
+      seen.set(s.key, {
+        key: s.key,
+        label: loc(s.title, lang) || s.key,
+        order: s.displayOrder ?? 0,
+      });
+    }
+    return Array.from(seen.values()).sort((a, b) => a.order - b.order);
   }, [artworks, lang]);
 
   const filtered = artworks.filter(
     (w) =>
-      (series === 'all' || w.series === series) &&
+      (seriesKey === 'all' || w.series?.key === seriesKey) &&
       (status === 'all' || w.status === status),
   );
 
@@ -99,16 +98,16 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
           <div className="filter-group">
             <span className="filter-label">{t(lang, 'filter_series')}</span>
             <button
-              className={`chip${series === 'all' ? ' on' : ''}`}
-              onClick={() => setSeries('all')}
+              className={`chip${seriesKey === 'all' ? ' on' : ''}`}
+              onClick={() => setSeriesKey('all')}
             >
               {t(lang, 'all')}
             </button>
             {allSeries.map((s) => (
               <button
                 key={s.key}
-                className={`chip${series === s.key ? ' on' : ''}`}
-                onClick={() => setSeries(s.key)}
+                className={`chip${seriesKey === s.key ? ' on' : ''}`}
+                onClick={() => setSeriesKey(s.key)}
               >
                 {s.label}
               </button>
@@ -135,7 +134,7 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
               <div className="card-img">
                 <img
                   src={imageUrls[w._id]}
-                  alt={loc(w.image?.alt, lang) || w.title}
+                  alt={loc(w.image?.alt, lang) || `${loc(w.series?.title, lang)} — ${w.code}`}
                   loading="lazy"
                   width="600"
                   height="600"
@@ -146,10 +145,13 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
                 </span>
               </div>
               <div className="card-meta">
-                <span className="card-title">{w.title}</span>
+                <span className="card-title">{loc(w.series?.title, lang)}</span>
                 <span className="card-year">{w.year}</span>
               </div>
-              <div className="card-medium">{loc(w.medium, lang)}</div>
+              <div className="card-medium">
+                <span className="card-code">{w.code}</span>
+                {loc(w.medium, lang) && <> · {loc(w.medium, lang)}</>}
+              </div>
             </button>
           ))}
         </div>
@@ -192,7 +194,8 @@ function Modal({ work, lang, imageUrl, onClose, contactUrl }: ModalProps) {
     };
   }, [onClose]);
 
-  const inquireUrl = `${contactUrl}?work=${encodeURIComponent(work.title)}&year=${work.year}`;
+  const seriesTitle = loc(work.series?.title, lang);
+  const inquireUrl = `${contactUrl}?code=${encodeURIComponent(work.code)}&series=${encodeURIComponent(seriesTitle)}&year=${work.year}`;
 
   return (
     <div className="modal-backdrop open" onClick={onClose}>
@@ -203,19 +206,17 @@ function Modal({ work, lang, imageUrl, onClose, contactUrl }: ModalProps) {
           </svg>
         </button>
         <div className="modal-image">
-          <img src={imageUrl} alt={loc(work.image?.alt, lang) || work.title} />
+          <img src={imageUrl} alt={loc(work.image?.alt, lang) || `${seriesTitle} — ${work.code}`} />
         </div>
         <div className="modal-body">
-          <div className="modal-series">
-            {seriesNames[work.series]?.[lang] ?? work.series}
-          </div>
-          <h3 className="modal-title">{work.title}</h3>
+          <div className="modal-series">{work.code}</div>
+          <h3 className="modal-title">{seriesTitle}</h3>
           <div className="modal-year">{work.year}</div>
-          <p className="modal-desc">{loc(work.description, lang)}</p>
+          {loc(work.description, lang) && <p className="modal-desc">{loc(work.description, lang)}</p>}
           <dl className="modal-specs">
             <div>
               <dt>{t(lang, 'medium')}</dt>
-              <dd>{loc(work.medium, lang)}</dd>
+              <dd>{loc(work.medium, lang) || '—'}</dd>
             </div>
             <div>
               <dt>{t(lang, 'dimensions')}</dt>

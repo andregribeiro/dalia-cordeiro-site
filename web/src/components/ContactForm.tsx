@@ -32,16 +32,18 @@ export default function ContactForm({ lang, accessKey }: Props) {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
-  // Pre-fill message from query params (?work=...&year=...)
+  // Pre-fill message from query params (?code=...&series=...&year=...)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const work = params.get('work');
+    const code = params.get('code');
+    const series = params.get('series');
     const year = params.get('year');
-    if (work) {
+    if (code) {
+      const ref = series ? `${code} (${series}, ${year ?? ''})` : `${code} (${year ?? ''})`;
       const prefix =
         lang === 'pt'
-          ? `Venho por este meio pedir informação sobre "${work}" (${year ?? ''}).\n\n`
-          : `I'm writing to inquire about "${work}" (${year ?? ''}).\n\n`;
+          ? `Venho por este meio pedir informação sobre a obra ${ref}.\n\n`
+          : `I'm writing to inquire about work ${ref}.\n\n`;
       setForm((f) => ({ ...f, message: prefix }));
     }
   }, [lang]);

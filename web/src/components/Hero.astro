@@ -22,7 +22,7 @@ const introText = t(lang, 'intro');
 // For now, render as-is.
 
 const featuredImgUrl = featured
-  ? urlFor(featured.image).width(800).auto('format').url()
+  ? urlFor(featured.image).width(1400).auto('format').url()
   : '';
 ---
 
@@ -39,19 +39,13 @@ const featuredImgUrl = featured
       </a>
     </div>
     {featured && (
-      <div>
-        <div class="hero-featured">
-          <img
-            src={featuredImgUrl}
-            alt={loc(featured.image?.alt, lang) || featured.title}
-            width="800"
-            height="1000"
-          />
-        </div>
-        <div class="hero-featured-cap">
-          <span><em>{featured.title}</em> &nbsp;·&nbsp; {loc(featured.medium, lang)}</span>
-          <span>{featured.year}</span>
-        </div>
+      <div class="hero-featured">
+        <img
+          src={featuredImgUrl}
+          alt={loc(featured.image?.alt, lang) || ''}
+          width="900"
+          height="1200"
+        />
       </div>
     )}
   </div>
