@@ -1,6 +1,6 @@
 export type Lang = 'pt' | 'en';
 
-export const defaultLang: Lang = 'pt';
+export const defaultLang: Lang = 'en';
 export const languages: Lang[] = ['pt', 'en'];
 
 export const routes = {

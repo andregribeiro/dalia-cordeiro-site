@@ -71,6 +71,29 @@ export const about = defineType({
         },
       ],
     }),
+    defineField({
+      name: 'bibliography',
+      title: 'Bibliografia',
+      description: 'Projetos, publicações e contextos em que a artista esteve envolvida.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'year', title: 'Ano', type: 'string' },
+            { name: 'title', title: 'Título', type: 'localizedString' },
+            { name: 'description', title: 'Descrição', type: 'localizedText' },
+            { name: 'url', title: 'Link (opcional)', type: 'url' },
+          ],
+          preview: {
+            select: { year: 'year', title: 'title.pt' },
+            prepare({ year, title }) {
+              return { title: `${year} — ${title}` };
+            },
+          },
+        },
+      ],
+    }),
   ],
   preview: {
     prepare() {

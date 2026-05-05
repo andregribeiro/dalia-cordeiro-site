@@ -54,6 +54,32 @@ export const siteSettings = defineType({
       title: 'Texto do rodapé',
       type: 'localizedString',
     }),
+    defineField({
+      name: 'upcomingEvent',
+      title: 'Próximo evento',
+      description: 'Aviso discreto no topo do site sobre uma exposição/evento futuro. Deixar vazio para não mostrar.',
+      type: 'object',
+      fields: [
+        { name: 'title', title: 'Título', type: 'localizedString' },
+        { name: 'date', title: 'Data', type: 'date', options: { dateFormat: 'YYYY-MM-DD' } },
+        { name: 'venue', title: 'Local', type: 'localizedString' },
+        { name: 'link', title: 'Link (opcional)', type: 'url' },
+      ],
+      options: { collapsible: true, collapsed: false },
+    }),
+    defineField({
+      name: 'recentPastEvent',
+      title: 'Evento passado recente',
+      description: 'Aviso discreto no topo do site sobre uma exposição/evento recente. Deixar vazio para não mostrar.',
+      type: 'object',
+      fields: [
+        { name: 'title', title: 'Título', type: 'localizedString' },
+        { name: 'date', title: 'Data', type: 'date', options: { dateFormat: 'YYYY-MM-DD' } },
+        { name: 'venue', title: 'Local', type: 'localizedString' },
+        { name: 'link', title: 'Link (opcional)', type: 'url' },
+      ],
+      options: { collapsible: true, collapsed: false },
+    }),
   ],
   preview: {
     prepare() {

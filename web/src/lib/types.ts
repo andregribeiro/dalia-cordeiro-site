@@ -37,6 +37,14 @@ export interface SelectedShow {
   title: LocalizedString;
 }
 
+export interface BibliographyEntry {
+  _key: string;
+  year: string;
+  title: LocalizedString;
+  description?: LocalizedText;
+  url?: string;
+}
+
 export interface About {
   portrait: SanityImageSource;
   shortBio: LocalizedText;
@@ -45,6 +53,14 @@ export interface About {
   birthYear: number;
   stats: AboutStat[];
   selectedShows: SelectedShow[];
+  bibliography?: BibliographyEntry[];
+}
+
+export interface SiteEvent {
+  title?: LocalizedString;
+  date?: string;
+  venue?: LocalizedString;
+  link?: string;
 }
 
 export interface SiteSettings {
@@ -57,4 +73,6 @@ export interface SiteSettings {
   instagramUrl: string;
   defaultSeoImage?: SanityImageSource;
   footerText: LocalizedString;
+  upcomingEvent?: SiteEvent;
+  recentPastEvent?: SiteEvent;
 }

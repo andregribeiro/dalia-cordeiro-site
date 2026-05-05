@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
+import EventNotice from '../../components/EventNotice.astro';
 import Hero from '../../components/Hero.astro';
 import Footer from '../../components/Footer.astro';
 import WorkGrid from '../../components/WorkGrid';
@@ -23,8 +24,9 @@ for (const aw of artworks) {
 }
 ---
 
-<Base lang={lang} title={`Dália Cordeiro — ${description}`} description={description}>
+<Base lang={lang} title="Dália Cordeiro · Art" description={description}>
   <Header lang={lang} active="works" instagramUrl={settings?.instagramUrl} />
+  <EventNotice lang={lang} upcoming={settings?.upcomingEvent} pastRecent={settings?.recentPastEvent} />
   <Hero
     lang={lang}
     headline={settings?.heroHeadline}

@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
+import EventNotice from '../../components/EventNotice.astro';
 import Footer from '../../components/Footer.astro';
 import ContactForm from '../../components/ContactForm';
 import { client } from '../../lib/sanity';
@@ -15,8 +16,9 @@ const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
 const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || '';
 ---
 
-<Base lang={lang} title={`${t(lang, 'contact_title')} — Dália Cordeiro`}>
+<Base lang={lang} title={`${t(lang, 'contact_title')} · Dália Cordeiro · Art`}>
   <Header lang={lang} active="contact" instagramUrl={settings?.instagramUrl} />
+  <EventNotice lang={lang} upcoming={settings?.upcomingEvent} pastRecent={settings?.recentPastEvent} />
 
   <section class="contact wrap" id="contact">
     <div>

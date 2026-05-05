@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "sanity dev",
+    "dev": "sanity dev --host 0.0.0.0",
     "build": "sanity build",
     "deploy": "sanity deploy"
   },

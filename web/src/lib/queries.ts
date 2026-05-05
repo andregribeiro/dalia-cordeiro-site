@@ -11,6 +11,7 @@ export const siteSettingsQuery = `
     siteName, heroHeadline, tagline,
     studioLocation, contactEmail, instagramUrl,
     defaultSeoImage, footerText,
+    upcomingEvent, recentPastEvent,
     heroArtwork-> {
       _id, title, slug, image, year, medium, dimensions, series, status, description
     }
@@ -21,6 +22,6 @@ export const aboutQuery = `
   *[_id == "about"][0] {
     portrait, shortBio, longBio,
     birthplace, birthYear,
-    stats, selectedShows
+    stats, selectedShows, bibliography
   }
 `;
