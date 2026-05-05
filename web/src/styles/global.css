@@ -185,7 +185,7 @@ a.evt:hover .evt-arrow { color: var(--accent); transform: translateX(2px); }
 }
 
 /* HERO */
-.hero { padding: 100px 0 70px; position: relative; }
+.hero { padding: 56px 0 70px; position: relative; }
 .hero-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
@@ -205,16 +205,6 @@ a.evt:hover .evt-arrow { color: var(--accent); transform: translateX(2px); }
   font-style: italic;
   font-weight: 300;
   color: var(--accent);
-}
-.hero-meta {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 17px;
-  color: var(--ink-soft);
-  margin-bottom: 40px;
-}
-.hero-meta::before {
-  content: '— ';
 }
 .hero p.intro {
   font-family: var(--serif);
@@ -439,7 +429,7 @@ a.evt:hover .evt-arrow { color: var(--accent); transform: translateX(2px); }
 }
 .about-sel li {
   display: grid;
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 90px 1fr;
   gap: 18px;
   align-items: baseline;
   font-family: var(--serif);
@@ -454,6 +444,7 @@ a.evt:hover .evt-arrow { color: var(--accent); transform: translateX(2px); }
   color: var(--muted);
   font-style: italic;
   font-size: 14px;
+  white-space: nowrap;
 }
 .about-sel li .t { color: var(--ink-soft); }
 
@@ -469,7 +460,7 @@ a.evt:hover .evt-arrow { color: var(--accent); transform: translateX(2px); }
 }
 .about-bib li {
   display: grid;
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 90px 1fr;
   gap: 18px;
   align-items: baseline;
   padding-bottom: 14px;
@@ -482,6 +473,7 @@ a.evt:hover .evt-arrow { color: var(--accent); transform: translateX(2px); }
   color: var(--muted);
   font-style: italic;
   font-size: 14px;
+  white-space: nowrap;
 }
 .about-bib li .t {
   font-family: var(--serif);

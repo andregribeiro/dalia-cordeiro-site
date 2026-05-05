@@ -12,8 +12,8 @@ interface Props {
 const { lang, upcoming, pastRecent } = Astro.props;
 
 const labels = {
-  pt: { upcoming: 'Próximo', past: 'Recentemente', region: 'Eventos' },
-  en: { upcoming: 'Upcoming', past: 'Recently', region: 'Events' },
+  pt: { upcoming: 'Próximo', past: 'Anterior', region: 'Eventos' },
+  en: { upcoming: 'Upcoming', past: 'Previous', region: 'Events' },
 } as const;
 
 function fmtDate(iso?: string): string | null {
@@ -39,8 +39,8 @@ const showStrip = showUpcoming || showPast;
 type Kind = 'upcoming' | 'past';
 
 const items: Array<{ kind: Kind; ev: SiteEvent }> = [];
-if (showUpcoming && upcoming) items.push({ kind: 'upcoming', ev: upcoming });
 if (showPast && pastRecent) items.push({ kind: 'past', ev: pastRecent });
+if (showUpcoming && upcoming) items.push({ kind: 'upcoming', ev: upcoming });
 ---
 
 {showStrip && (

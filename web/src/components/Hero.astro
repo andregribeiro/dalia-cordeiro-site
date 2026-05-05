@@ -8,14 +8,12 @@ import type { Artwork, LocalizedString } from '../lib/types';
 interface Props {
   lang: Lang;
   headline: LocalizedString;
-  tagline: LocalizedString;
   featured?: Artwork;
 }
 
-const { lang, headline, tagline, featured } = Astro.props;
+const { lang, headline, featured } = Astro.props;
 
 const heroText = loc(headline, lang);
-const taglineText = loc(tagline, lang);
 const introText = t(lang, 'intro');
 
 // Split headline for the <em> styling: wrap the second word in <em>
@@ -31,7 +29,6 @@ const featuredImgUrl = featured
 <section class="hero wrap">
   <div class="hero-grid">
     <div>
-      <div class="hero-meta">{taglineText}</div>
       <h1 set:html={heroText} />
       <p class="intro">{introText}</p>
       <a class="hero-cta" href="#works">

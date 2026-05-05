@@ -59,7 +59,6 @@ const bioParas = blocksToText(about?.longBio?.[lang] ?? about?.longBio?.pt);
       <div class="about-extras">
         {about?.selectedShows && about.selectedShows.length > 0 && (
           <div class="about-sel">
-            <div class="about-sel-label">Seleção</div>
             <ul>
               {about.selectedShows.map((show) => (
                 <li>
