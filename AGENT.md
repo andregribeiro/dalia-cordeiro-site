@@ -241,7 +241,7 @@ wrangler pages deploy web/dist --project-name dalia-cordeiro-site
   - Route: `studio@daliacordeiroart.com` → `daliacordeiro.studio@outlook.com`
   - Catch-all (recommended setup): `*@daliacordeiroart.com` → `daliacordeiro.studio@outlook.com` so legacy / cards-printed addresses don't bounce.
   - DNS records (3 MX `route{1,2,3}.mx.cloudflare.net.` + SPF TXT `v=spf1 include:_spf.mx.cloudflare.net ~all`) are managed automatically by Email Routing — do not edit by hand.
-- **Limitation — inbound only**: Email Routing does NOT let the artist *send* as `studio@daliacordeiroart.com`. Replies leave the Outlook account and the recipient sees `daliacordeiro.studio@outlook.com`. To send-as the custom address would require Google Workspace / Microsoft 365 (~5 €/user/month) or an SMTP relay (SendGrid/Mailgun free tiers); not configured today, agreed deferral.
+- **Inbound only by design**: replies leave the Outlook account and recipients see `daliacordeiro.studio@outlook.com`. Sending as `studio@daliacordeiroart.com` is **not a project requirement** — do not propose Google Workspace / M365 / SMTP-relay setups unless explicitly asked.
 - **Verifying inbound delivery**:
   ```bash
   dig @1.1.1.1 +short daliacordeiroart.com MX   # 3 lines, route1/2/3.mx.cloudflare.net

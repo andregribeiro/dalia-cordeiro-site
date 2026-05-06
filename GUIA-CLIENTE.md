@@ -74,7 +74,6 @@ O dominio e o unico custo recorrente. Pode ser registado no [Cloudflare Registra
 
 - **Sanity Pro** (~99 USD/mes): so se ultrapassar os limites free (improvavel para um portfolio)
 - **Cloudflare Pro**: so se precisar de funcionalidades avancadas (desnecessario)
-- **Email profissional para enviar como** studio@daliacordeiroart.com: ~5 EUR/mes via Google Workspace ou Microsoft 365. Nao e necessario para receber — receber esta resolvido gratis via Cloudflare Email Routing (ja configurado).
 
 ---
 
@@ -111,7 +110,6 @@ Configurar um **webhook no Sanity** que dispara automaticamente o rebuild no Clo
 - **Pagina individual por obra** — URL propria para cada pintura (melhor para SEO e partilha)
 - **Galeria de imagens por obra** — slider com multiplas fotos (detalhe, contexto, moldura)
 - **Blog/Noticias** — seccao para novidades, exposicoes, artigos
-- **Send-as profissional** — permitir enviar emails como studio@daliacordeiroart.com (e nao so receber). Requer Google Workspace ou Microsoft 365.
 
 ### Funcionalidades avancadas (1-3 dias)
 
