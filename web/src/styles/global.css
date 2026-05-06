@@ -141,44 +141,54 @@ body::after {
 
 /* EVENT NOTICE */
 .event-notice {
-  border-bottom: 1px solid var(--line-soft);
-  background: color-mix(in srgb, var(--paper-2) 70%, transparent);
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
   position: relative;
   z-index: 50;
 }
 .event-notice-inner {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 9px 40px;
+  padding: 14px 40px;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 32px;
-  align-items: baseline;
+  gap: 8px 36px;
+  align-items: center;
   justify-content: center;
 }
 .evt {
   display: inline-flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
   color: var(--ink-soft);
   text-decoration: none;
-  transition: color .2s;
+  transition: color .2s, transform .2s;
   flex-wrap: wrap;
+  padding: 4px 0 4px 12px;
+  border-left: 3px solid transparent;
 }
-a.evt:hover { color: var(--accent); }
+.evt-upcoming { border-left-color: var(--accent); }
+.evt-past {
+  border-left-color: var(--muted);
+  opacity: 0.78;
+}
+a.evt:hover { color: var(--accent); transform: translateY(-1px); }
 a.evt:hover .evt-title { color: var(--accent); }
 .evt-mark {
   color: var(--accent);
-  font-size: 11px;
+  font-size: 13px;
   transform: translateY(-1px);
 }
+.evt-past .evt-mark { color: var(--muted); }
 .evt-label {
   font-family: var(--sans);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   font-size: 10.5px;
-  color: var(--muted);
+  font-weight: 500;
+  color: var(--accent);
 }
+.evt-past .evt-label { color: var(--muted); }
 .evt-sep { color: var(--line); }
 .evt-date, .evt-venue {
   font-family: var(--serif);
@@ -188,26 +198,28 @@ a.evt:hover .evt-title { color: var(--accent); }
 }
 .evt-title {
   font-family: var(--serif);
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   color: var(--ink);
   transition: color .2s;
 }
 .evt-arrow {
   font-family: var(--sans);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   margin-left: 2px;
   transition: transform .2s, color .2s;
 }
-a.evt:hover .evt-arrow { color: var(--accent); transform: translateX(2px); }
+a.evt:hover .evt-arrow { color: var(--accent); transform: translateX(3px); }
 @media (max-width: 700px) {
   .event-notice-inner {
-    padding: 9px 22px;
+    padding: 12px 22px;
     flex-direction: column;
-    gap: 6px;
-    align-items: flex-start;
+    gap: 10px;
+    align-items: stretch;
     justify-content: flex-start;
   }
+  .evt { padding: 6px 0 6px 12px; }
 }
 
 /* HERO */
