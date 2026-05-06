@@ -31,11 +31,6 @@ export const siteSettings = defineType({
       to: [{ type: 'artwork' }],
     }),
     defineField({
-      name: 'tagline',
-      title: 'Tagline',
-      type: 'localizedString',
-    }),
-    defineField({
       name: 'studioLocation',
       title: 'Localização do atelier',
       type: 'localizedString',

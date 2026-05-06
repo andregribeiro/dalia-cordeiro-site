@@ -13,7 +13,6 @@ export const ui = {
     nav_works: 'Obras',
     nav_about: 'Sobre',
     nav_contact: 'Contacto',
-    tagline: 'Pintora — Porto, Portugal',
     intro:
       'Um corpo de trabalho em óleo, pastel e técnica mista. Figuras, santas e bestas mansas que não param de se rearranjar.',
     view_works: 'Ver o conjunto de obras',
@@ -47,7 +46,6 @@ export const ui = {
     nav_works: 'Works',
     nav_about: 'About',
     nav_contact: 'Contact',
-    tagline: 'Painter — Porto, Portugal',
     intro:
       'A body of work in oil, pastel and mixed media. Figures, saints and soft beasts that keep rearranging themselves.',
     view_works: 'View the body of work',

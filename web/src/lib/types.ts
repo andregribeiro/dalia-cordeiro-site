@@ -69,7 +69,6 @@ export interface SiteSettings {
   heroHeadline: LocalizedString;
   heroIntro?: LocalizedText;
   heroArtwork: Artwork;
-  tagline: LocalizedString;
   studioLocation: LocalizedString;
   contactEmail: string;
   instagramUrl: string;

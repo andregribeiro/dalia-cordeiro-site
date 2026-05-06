@@ -15,7 +15,7 @@ const lang = 'pt' as const;
 const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
 const artworks = await client.fetch<Artwork[]>(allArtworksQuery);
 
-const description = loc(settings?.tagline, lang) || 'Pintora — Porto, Portugal';
+const description = 'Pintora — Porto, Portugal';
 
 // Pre-compute image URLs server-side (card thumbnails)
 const imageUrls: Record<string, string> = {};
