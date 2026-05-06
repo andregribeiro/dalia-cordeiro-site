@@ -69,4 +69,4 @@ Disallow: /
 User-agent: Timpibot
 Disallow: /
 
-Sitemap: https://daliacordeiro.art/sitemap-index.xml
+Sitemap: https://daliacordeiroart.com/sitemap-index.xml

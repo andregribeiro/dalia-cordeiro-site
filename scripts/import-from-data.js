@@ -306,7 +306,7 @@ async function main() {
       pt: 'Atelier — Porto, Portugal',
       en: 'Studio — Porto, Portugal',
     },
-    contactEmail: 'studio@daliacordeiro.art',
+    contactEmail: 'studio@daliacordeiroart.com',
     instagramUrl: 'https://www.instagram.com/dalia_cordeiro_art/',
     footerText: {
       _type: 'localizedString',

@@ -20,7 +20,7 @@ const ARTIST = {
   birthYear: 1955,
   workLocation: 'Porto, Portugal',
   sameAs: ['https://www.instagram.com/dalia_cordeiro_art/'],
-  email: 'studio@daliacordeiro.art',
+  email: 'studio@daliacordeiroart.com',
 };
 
 /** Build a Person / VisualArtist JSON-LD block. */
