@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import type { Artwork, LocalizedString, LocalizedText } from '../lib/types';
 import type { Lang } from '../lib/i18n';
 
@@ -136,6 +136,7 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
                   src={imageUrls[w._id]}
                   alt={loc(w.image?.alt, lang) || `${loc(w.series?.title, lang)} — ${w.code}`}
                   loading="lazy"
+                  decoding="async"
                   width="600"
                   height="600"
                 />
@@ -189,11 +190,26 @@ function Modal({ work, works, lang, imageUrls, onClose, onNavigate, contactUrl }
   const total = works.length;
   const currentIndex = works.findIndex((w) => w._id === work._id);
   const hasNav = total > 1;
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const goRelative = (offset: number) => {
     if (!hasNav || currentIndex < 0) return;
     const next = (currentIndex + offset + total) % total;
     onNavigate(works[next]);
+  };
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length !== 1) return;
+    touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStartRef.current || !hasNav) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartRef.current.x;
+    const dy = t.clientY - touchStartRef.current.y;
+    touchStartRef.current = null;
+    if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return;
+    goRelative(dx > 0 ? -1 : 1);
   };
 
   useEffect(() => {
@@ -225,8 +241,8 @@ function Modal({ work, works, lang, imageUrls, onClose, onNavigate, contactUrl }
             <path d="M6 6l12 12M18 6L6 18" />
           </svg>
         </button>
-        <div className="modal-image">
-          <img src={imageUrls[work._id]} alt={loc(work.image?.alt, lang) || `${seriesTitle} — ${work.code}`} />
+        <div className="modal-image" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+          <img src={imageUrls[work._id]} alt={loc(work.image?.alt, lang) || `${seriesTitle} — ${work.code}`} decoding="async" />
           {hasNav && (
             <>
               <button
