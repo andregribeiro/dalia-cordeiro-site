@@ -161,9 +161,11 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
       {openWork && (
         <Modal
           work={openWork}
+          works={filtered}
           lang={lang}
-          imageUrl={imageUrls[openWork._id]}
+          imageUrls={imageUrls}
           onClose={() => setOpenWork(null)}
+          onNavigate={setOpenWork}
           contactUrl={contactUrl}
         />
       )}
@@ -175,16 +177,30 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
 
 interface ModalProps {
   work: Artwork;
+  works: Artwork[];
   lang: Lang;
-  imageUrl: string;
+  imageUrls: Record<string, string>;
   onClose: () => void;
+  onNavigate: (work: Artwork) => void;
   contactUrl: string;
 }
 
-function Modal({ work, lang, imageUrl, onClose, contactUrl }: ModalProps) {
+function Modal({ work, works, lang, imageUrls, onClose, onNavigate, contactUrl }: ModalProps) {
+  const total = works.length;
+  const currentIndex = works.findIndex((w) => w._id === work._id);
+  const hasNav = total > 1;
+
+  const goRelative = (offset: number) => {
+    if (!hasNav || currentIndex < 0) return;
+    const next = (currentIndex + offset + total) % total;
+    onNavigate(works[next]);
+  };
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+      else if (e.key === 'ArrowLeft') goRelative(-1);
+      else if (e.key === 'ArrowRight') goRelative(1);
     };
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', handler);
@@ -192,10 +208,14 @@ function Modal({ work, lang, imageUrl, onClose, contactUrl }: ModalProps) {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', handler);
     };
-  }, [onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [work, works, onClose]);
 
   const seriesTitle = loc(work.series?.title, lang);
   const inquireUrl = `${contactUrl}?code=${encodeURIComponent(work.code)}&series=${encodeURIComponent(seriesTitle)}&year=${work.year}`;
+  const navLabels = lang === 'pt'
+    ? { prev: 'Obra anterior', next: 'Obra seguinte' }
+    : { prev: 'Previous work', next: 'Next work' };
 
   return (
     <div className="modal-backdrop open" onClick={onClose}>
@@ -206,7 +226,34 @@ function Modal({ work, lang, imageUrl, onClose, contactUrl }: ModalProps) {
           </svg>
         </button>
         <div className="modal-image">
-          <img src={imageUrl} alt={loc(work.image?.alt, lang) || `${seriesTitle} — ${work.code}`} />
+          <img src={imageUrls[work._id]} alt={loc(work.image?.alt, lang) || `${seriesTitle} — ${work.code}`} />
+          {hasNav && (
+            <>
+              <button
+                type="button"
+                className="modal-nav prev"
+                onClick={() => goRelative(-1)}
+                aria-label={navLabels.prev}
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M15 5l-7 7 7 7" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                className="modal-nav next"
+                onClick={() => goRelative(1)}
+                aria-label={navLabels.next}
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+              <div className="modal-counter" aria-hidden="true">
+                {String(currentIndex + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+              </div>
+            </>
+          )}
         </div>
         <div className="modal-body">
           <div className="modal-series">{work.code}</div>

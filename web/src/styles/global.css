@@ -661,6 +661,48 @@ footer .ig-link { color: var(--muted); font-family: var(--serif); font-style: it
   z-index: 2;
 }
 .modal-close:hover { color: var(--accent); }
+.modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  transition: background .2s, color .2s, transform .2s, opacity .2s;
+  opacity: 0.85;
+  box-shadow: 0 4px 18px -8px rgba(0,0,0,.45);
+}
+.modal-nav:hover { opacity: 1; background: var(--paper); color: var(--accent); }
+.modal-nav:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.modal-nav.prev { left: 18px; }
+.modal-nav.next { right: 18px; }
+.modal-nav.prev:hover { transform: translateY(-50%) translateX(-2px); }
+.modal-nav.next:hover { transform: translateY(-50%) translateX(2px); }
+.modal-counter {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--paper);
+  background: color-mix(in srgb, var(--ink) 55%, transparent);
+  backdrop-filter: blur(6px);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+  z-index: 3;
+}
 .modal-series {
   font-family: var(--sans);
   font-size: 11px;
@@ -787,6 +829,10 @@ body.grid-airy .grid { grid-template-columns: repeat(2, 1fr); gap: 48px 40px; ma
   .modal { grid-template-columns: 1fr; height: calc(100vh - 24px); width: calc(100vw - 24px); grid-template-rows: 45vh 1fr; }
   .modal-body { padding: 32px 28px; }
   .modal-title { font-size: 34px; }
+  .modal-nav { width: 38px; height: 38px; }
+  .modal-nav.prev { left: 10px; }
+  .modal-nav.next { right: 10px; }
+  .modal-counter { bottom: 10px; font-size: 10.5px; padding: 4px 10px; }
   .nav { gap: 20px; font-size: 11px; }
   .header-inner { grid-template-columns: auto auto auto; gap: 12px; }
 }
