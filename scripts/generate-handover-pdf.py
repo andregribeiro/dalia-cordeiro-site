@@ -16,7 +16,7 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import (
     BaseDocTemplate, PageTemplate, Frame,
     Paragraph, Spacer, PageBreak, Table, TableStyle, KeepTogether,
-    Flowable,
+    Flowable, NextPageTemplate,
 )
 from reportlab.graphics.shapes import Drawing, Rect, String, Line, Polygon
 from reportlab.pdfbase import pdfmetrics
@@ -47,7 +47,7 @@ S = {
     'cover_title_em': ParagraphStyle('cover_title_em', fontName=SERIF_IT, fontSize=46, leading=48, textColor=ACCENT, alignment=TA_LEFT),
     'cover_sub':      ParagraphStyle('cover_sub', fontName=SERIF_IT, fontSize=18, leading=24, textColor=INK_SOFT, alignment=TA_LEFT, spaceAfter=18),
     'cover_meta':     ParagraphStyle('cover_meta', fontName=SANS, fontSize=10, leading=14, textColor=MUTED),
-    'h1':             ParagraphStyle('h1', fontName=SERIF, fontSize=28, leading=32, textColor=INK, spaceBefore=18, spaceAfter=18),
+    'h1':             ParagraphStyle('h1', fontName=SERIF, fontSize=28, leading=32, textColor=INK, spaceBefore=2, spaceAfter=14),
     'h1_em':          ParagraphStyle('h1_em', fontName=SERIF_IT, fontSize=28, leading=32, textColor=ACCENT),
     'h2':             ParagraphStyle('h2', fontName=SERIF_BOLD, fontSize=15, leading=20, textColor=INK, spaceBefore=14, spaceAfter=6),
     'h3':             ParagraphStyle('h3', fontName=SANS_BOLD, fontSize=10, leading=14, textColor=ACCENT, spaceBefore=10, spaceAfter=4),
@@ -192,7 +192,7 @@ class Background:
             # Header text
             canvas.setFont(SERIF_IT, 9)
             canvas.setFillColor(MUTED)
-            canvas.drawString(20 * mm, A4[1] - 12 * mm, 'Manual do Site  ·  Dália Cordeiro')
+            canvas.drawString(20 * mm, A4[1] - 12 * mm, 'Manual do Site  ·  Dália Cordeiro Art')
             canvas.drawRightString(A4[0] - 20 * mm, A4[1] - 12 * mm, 'daliacordeiroart.com')
 
             # Footer
@@ -213,17 +213,17 @@ def build():
         str(out_path),
         pagesize=A4,
         leftMargin=22 * mm, rightMargin=22 * mm,
-        topMargin=22 * mm, bottomMargin=22 * mm,
-        title='Manual do Site — Dália Cordeiro',
+        topMargin=18 * mm, bottomMargin=18 * mm,
+        title='Manual do Site — Dália Cordeiro Art',
         author='Andre Ribeiro',
         subject='Documento de entrega do site daliacordeiroart.com',
     )
 
-    cover_frame = Frame(22 * mm, 22 * mm, A4[0] - 44 * mm, A4[1] - 44 * mm,
-                        leftPadding=20 * mm, rightPadding=0, topPadding=80 * mm, bottomPadding=0,
+    cover_frame = Frame(22 * mm, 18 * mm, A4[0] - 44 * mm, A4[1] - 36 * mm,
+                        leftPadding=20 * mm, rightPadding=0, topPadding=56 * mm, bottomPadding=0,
                         showBoundary=0)
-    body_frame = Frame(22 * mm, 22 * mm, A4[0] - 44 * mm, A4[1] - 44 * mm,
-                       leftPadding=0, rightPadding=0, topPadding=10 * mm, bottomPadding=10 * mm,
+    body_frame = Frame(22 * mm, 18 * mm, A4[0] - 44 * mm, A4[1] - 36 * mm,
+                       leftPadding=0, rightPadding=0, topPadding=4 * mm, bottomPadding=6 * mm,
                        showBoundary=0)
 
     doc.addPageTemplates([
@@ -236,7 +236,7 @@ def build():
     # ───── COVER ─────
     story.append(Paragraph('MANUAL DO SITE', S['cover_eyebrow']))
     story.append(Spacer(1, 14))
-    story.append(Paragraph('<i>daliacordeiro.</i><font color="#b84e3a"><i>art</i></font>', S['cover_title']))
+    story.append(Paragraph('Dália Cordeiro <font color="#b84e3a"><i>Art</i></font>', S['cover_title']))
     story.append(Spacer(1, 6))
     story.append(Paragraph('Guia para a artista — o que existe, como editar, quanto custa.', S['cover_sub']))
     story.append(hr_accent(40))
@@ -245,7 +245,8 @@ def build():
         'Preparado para Dália Cordeiro<br/>'
         'Maio de 2026<br/><br/>'
         'Domínio público:&nbsp;&nbsp;<font color="#1f1b16"><b>daliacordeiroart.com</b></font><br/>'
-        'Painel de edição:&nbsp;&nbsp;<font color="#1f1b16"><b>daliacordeiro.sanity.studio</b></font>',
+        'Painel de edição:&nbsp;&nbsp;<font color="#1f1b16"><b>daliacordeiro.sanity.studio</b></font><br/>'
+        'Email pessoal (login):&nbsp;&nbsp;<font color="#1f1b16"><b>daliacordeiro.studio@outlook.com</b></font>',
         S['cover_meta']))
     story.append(Spacer(1, 30))
     story.append(Paragraph(
@@ -254,13 +255,9 @@ def build():
         S['cover_meta']))
     story.append(Paragraph('— frase de abertura do site', S['cover_meta']))
 
+    # Force every page after the cover to use the body template.
+    story.append(NextPageTemplate('body'))
     story.append(PageBreak())
-
-    # Switch to body template for the rest
-    from reportlab.platypus import NextPageTemplate
-    # The first page already used 'cover'; subsequent pages use 'body' by default (next in list)
-    # but we need to ensure this — push a NextPageTemplate before content begins
-    # (NextPageTemplate inserted at top of remaining story)
 
     # ───── ÍNDICE ─────
     story.append(h1('<font face="Times-Italic" color="#b84e3a">Índice</font>'))
@@ -304,12 +301,12 @@ def build():
 
     story.append(h2('Endereços importantes'))
     addrs = [
-        ['Site público',       'https://daliacordeiroart.com'],
-        ['Painel de edição',   'https://daliacordeiro.sanity.studio'],
-        ['Email da artista',   'studio@daliacordeiroart.com'],
-        ['Instagram',          'https://www.instagram.com/dalia_cordeiro_art/'],
-        ['Repositório',        'github.com/andregribeiro/dalia-cordeiro-site'],
-        ['Termos / direitos',  'https://daliacordeiroart.com/pt/termos'],
+        ['Site público',           'https://daliacordeiroart.com'],
+        ['Painel de edição',       'https://daliacordeiro.sanity.studio'],
+        ['Email pessoal (login)',  'daliacordeiro.studio@outlook.com'],
+        ['Email do site',          'studio@daliacordeiroart.com   →   reencaminha p/ Outlook'],
+        ['Instagram',              'https://www.instagram.com/dalia_cordeiro_art/'],
+        ['Termos / direitos',      'https://daliacordeiroart.com/pt/termos'],
     ]
     addr_table = Table(
         [[Paragraph(k, S['tbl_cell_b']), Paragraph(v, S['mono'])] for k, v in addrs],
@@ -363,14 +360,16 @@ def build():
         'a porta de entrada.',
         S['body']))
 
-    story.append(PageBreak())
-
+    story.append(Spacer(1, 14))
     story.append(h2('O que cada peça faz'))
 
     pieces = [
         ('Outlook (email)',
-         'A conta <b>studio@daliacordeiroart.com</b> é a chave. Serve para o login no Sanity, '
-         'na Cloudflare e no GitHub, e é onde aterram os pedidos dos visitantes do site.'),
+         'A conta <b>daliacordeiro.studio@outlook.com</b> é a conta principal. Serve para o '
+         'login no Sanity (e, no futuro, na Cloudflare se a artista quiser ter acesso direto). '
+         'É também aqui que aterram os pedidos enviados para <b>studio@daliacordeiroart.com</b> '
+         '— o email público do site é apenas uma fachada que reencaminha automaticamente para '
+         'o Outlook.'),
         ('Sanity Studio',
          'Painel web de edição (<i>CMS</i>). É aqui que se cria, edita e publica obras, séries, '
          'biografia, eventos e tudo o mais. Funciona em qualquer browser, sem instalar nada.'),
@@ -440,8 +439,6 @@ def build():
         '<b>Importante:</b> nada é publicado até clicar <b>Publish</b> (canto inferior direito). '
         'Antes de Publish, fica em rascunho — pode-se sair, voltar mais tarde e continuar.'))
 
-    story.append(PageBreak())
-
     story.append(h2('3.2  Criar / editar uma série'))
     story.append(Paragraph(
         '<b>Série</b> → escolher uma das existentes ou clicar <b>+ Create</b>. Cada série tem:',
@@ -487,8 +484,6 @@ def build():
         'WhatsApp, Slack, redes sociais. Se vazia, usa a obra em destaque automaticamente.<br/><br/>'
         '<b>Texto do rodapé:</b> a frase final do rodapé. Por defeito é o copyright.',
         S['body_l']))
-
-    story.append(PageBreak())
 
     story.append(h2('3.5  Anunciar exposições e eventos'))
     story.append(Paragraph(
@@ -609,10 +604,12 @@ def build():
         ['Web3Forms', 'Free', '€ 0',
          '250 mensagens de formulário / mês. Se passar (improvável), plano pago a partir de '
          '$8 / mês para 1000 mensagens.'],
-        ['Email (Outlook)', '—', '€ 0',
-         'Conta já existente da artista. Pode opcionalmente associar o domínio (ex: '
-         'studio@daliacordeiroart.com a reencaminhar para o Outlook) — gratuito via '
-         'Cloudflare Email Routing.'],
+        ['Email pessoal (Outlook)', '—', '€ 0',
+         'Conta já existente: <b>daliacordeiro.studio@outlook.com</b>. Sem custo.'],
+        ['Email do site (encaminhamento)', 'Cloudflare Email Routing', '€ 0',
+         '<b>studio@daliacordeiroart.com</b> reencaminha automaticamente para o Outlook. '
+         'Configurado no painel da Cloudflare assim que o domínio estiver ligado. '
+         'Gratuito até 200 endereços por domínio. Recebe sem limite de quantidade.'],
     ]
     cost_data = [[Paragraph(c, S['tbl_header']) for c in cost_header]] + \
                 [[Paragraph(r[0], S['tbl_cell_b']),
@@ -638,13 +635,6 @@ def build():
         'renovação anual do domínio. O domínio renova-se automaticamente todos os anos — '
         'a artista só precisa de garantir que o cartão associado à conta Cloudflare '
         'continua válido.'))
-
-    story.append(h2('Custos pontuais (já pagos)'))
-    story.append(Paragraph(
-        'O desenvolvimento inicial do site, a configuração de toda a infraestrutura, '
-        'o desenho gráfico, a tipografia, o sistema de gestão de conteúdo e a documentação '
-        'já estão incluídos. Não há fees de instalação recorrentes.',
-        S['body']))
 
     story.append(h2('Quando os custos podem aumentar'))
     story.append(Paragraph(
@@ -774,8 +764,8 @@ def build():
          'No Sanity, clicar no ícone de relógio (histórico) do documento editado, '
          'escolher a versão anterior e clicar «Restore».'),
         ('O site está fora do ar',
-         'Verificar se a conta Cloudflare está bem (sem renovação falhada). '
-         'Se persistir, contactar o programador.'),
+         'Verificar se a conta Cloudflare está bem — sem renovação falhada do domínio ou '
+         'do método de pagamento associado.'),
         ('O formulário de contacto não me chega ao email',
          'Verificar a pasta de spam. Verificar no painel do Web3Forms se a mensagem foi '
          'recebida. Se sim mas não chegou ao Outlook, é problema de filtros do email.'),
