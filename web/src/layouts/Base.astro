@@ -25,10 +25,12 @@ let altPath = currentPath;
 if (currentPath === curRoutes.home) altPath = altRoutes.home;
 else if (currentPath === curRoutes.about) altPath = altRoutes.about;
 else if (currentPath === curRoutes.contact) altPath = altRoutes.contact;
+else if (currentPath === curRoutes.terms) altPath = altRoutes.terms;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const canonical = `${siteUrl}${currentPath}`;
 const altUrl = `${siteUrl}${altPath}`;
+const tdmPolicyUrl = `${siteUrl}${curRoutes.terms}`;
 
 const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 ---
@@ -42,7 +44,11 @@ const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#efe7d6" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="robots" content="index, follow, max-image-preview:large, noai, noimageai" />
+
+    <!-- AI training opt-out signals (search/retrieval bots are unaffected) -->
+    <meta name="tdm-reservation" content="1" />
+    <meta name="tdm-policy" content={tdmPolicyUrl} />
 
     <!-- hreflang -->
     <link rel="alternate" hreflang={lang === 'pt' ? 'pt-PT' : 'en'} href={canonical} />

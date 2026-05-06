@@ -4,8 +4,8 @@ export const defaultLang: Lang = 'en';
 export const languages: Lang[] = ['pt', 'en'];
 
 export const routes = {
-  pt: { home: '/pt/', about: '/pt/sobre', contact: '/pt/contacto' },
-  en: { home: '/en/', about: '/en/about', contact: '/en/contact' },
+  pt: { home: '/pt/', about: '/pt/sobre', contact: '/pt/contacto', terms: '/pt/termos' },
+  en: { home: '/en/', about: '/en/about', contact: '/en/contact', terms: '/en/terms' },
 } as const;
 
 export const ui = {
