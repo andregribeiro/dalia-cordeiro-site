@@ -4,7 +4,7 @@ import Header from '../../components/Header.astro';
 import EventNotice from '../../components/EventNotice.astro';
 import Footer from '../../components/Footer.astro';
 import ContactForm from '../../components/ContactForm';
-import { client } from '../../lib/sanity';
+import { client, urlFor } from '../../lib/sanity';
 import { siteSettingsQuery } from '../../lib/queries';
 import type { SiteSettings } from '../../lib/types';
 import { loc } from '../../lib/helpers';
@@ -14,9 +14,12 @@ const lang = 'pt' as const;
 
 const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
 const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || '';
+
+const seoSrc = settings?.defaultSeoImage ?? settings?.heroArtwork?.image;
+const ogImage = seoSrc ? urlFor(seoSrc).width(1200).auto('format').url() : undefined;
 ---
 
-<Base lang={lang} title={`${t(lang, 'contact_title')} · Dália Cordeiro · Art`}>
+<Base lang={lang} title={`${t(lang, 'contact_title')} · Dália Cordeiro · Art`} description={t(lang, 'contact_sub')} ogImage={ogImage}>
   <Header lang={lang} active="contact" instagramUrl={settings?.instagramUrl} />
   <EventNotice lang={lang} upcoming={settings?.upcomingEvent} pastRecent={settings?.recentPastEvent} />
 

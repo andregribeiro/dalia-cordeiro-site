@@ -8,6 +8,7 @@ import { aboutQuery, siteSettingsQuery } from '../../lib/queries';
 import type { About, SiteSettings } from '../../lib/types';
 import { loc } from '../../lib/helpers';
 import { t } from '../../lib/i18n';
+import { personJsonLd } from '../../lib/seo';
 
 const lang = 'pt' as const;
 
@@ -15,6 +16,11 @@ const about = await client.fetch<About>(aboutQuery);
 const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
 
 const portraitUrl = about?.portrait ? urlFor(about.portrait).width(800).auto('format').url() : '';
+
+const seoSrc = settings?.defaultSeoImage ?? about?.portrait ?? settings?.heroArtwork?.image;
+const ogImage = seoSrc ? urlFor(seoSrc).width(1200).auto('format').url() : undefined;
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const jsonLd = personJsonLd(lang, siteUrl, ogImage);
 
 // Convert rich text blocks to plain paragraphs for now
 function blocksToText(blocks: any[] | undefined): string[] {
@@ -27,7 +33,7 @@ function blocksToText(blocks: any[] | undefined): string[] {
 const bioParas = blocksToText(about?.longBio?.[lang] ?? about?.longBio?.pt);
 ---
 
-<Base lang={lang} title={`${t(lang, 'about_title')} · Dália Cordeiro · Art`} description={loc(about?.shortBio, lang)}>
+<Base lang={lang} title={`${t(lang, 'about_title')} · Dália Cordeiro · Art`} description={loc(about?.shortBio, lang)} ogImage={ogImage} ogType="profile" jsonLd={jsonLd}>
   <Header lang={lang} active="about" instagramUrl={settings?.instagramUrl} />
   <EventNotice lang={lang} upcoming={settings?.upcomingEvent} pastRecent={settings?.recentPastEvent} />
 

@@ -1,6 +1,7 @@
 ---
 import type { Lang } from '../lib/i18n';
 import { routes, getAlternateLang } from '../lib/i18n';
+import { OG_LOCALE, SITE_NAME } from '../lib/seo';
 import '../styles/global.css';
 
 interface Props {
@@ -8,19 +9,28 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  ogImageAlt?: string;
+  ogType?: 'website' | 'article' | 'profile';
+  jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
-const { lang, title, description, ogImage } = Astro.props;
+const { lang, title, description, ogImage, ogImageAlt, ogType = 'website', jsonLd } = Astro.props;
 const altLang = getAlternateLang(lang);
 
 const currentPath = Astro.url.pathname;
 const altRoutes = routes[altLang];
 const curRoutes = routes[lang];
 
-let altUrl = currentPath;
-if (currentPath === curRoutes.home) altUrl = altRoutes.home;
-else if (currentPath === curRoutes.about) altUrl = altRoutes.about;
-else if (currentPath === curRoutes.contact) altUrl = altRoutes.contact;
+let altPath = currentPath;
+if (currentPath === curRoutes.home) altPath = altRoutes.home;
+else if (currentPath === curRoutes.about) altPath = altRoutes.about;
+else if (currentPath === curRoutes.contact) altPath = altRoutes.contact;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const canonical = `${siteUrl}${currentPath}`;
+const altUrl = `${siteUrl}${altPath}`;
+
+const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 ---
 
 <!doctype html>
@@ -30,21 +40,44 @@ else if (currentPath === curRoutes.contact) altUrl = altRoutes.contact;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#efe7d6" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
 
     <!-- hreflang -->
-    <link rel="alternate" hreflang={lang === 'pt' ? 'pt-PT' : 'en'} href={currentPath} />
+    <link rel="alternate" hreflang={lang === 'pt' ? 'pt-PT' : 'en'} href={canonical} />
     <link rel="alternate" hreflang={altLang === 'pt' ? 'pt-PT' : 'en'} href={altUrl} />
-    <link rel="alternate" hreflang="x-default" href={routes.en.home} />
+    <link rel="alternate" hreflang="x-default" href={`${siteUrl}${routes.en.home}`} />
 
-    <!-- Preload critical fonts -->
+    <!-- Preconnect / preload -->
+    <link rel="preconnect" href="https://cdn.sanity.io" crossorigin />
     <link rel="preload" href="/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/intertight-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={OG_LOCALE[lang]} />
+    <meta property="og:locale:alternate" content={OG_LOCALE[altLang]} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta property="og:image:alt" content={ogImageAlt ?? title} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {ogImage && <meta name="twitter:image:alt" content={ogImageAlt ?? title} />}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    {jsonLdArray.map((item) => (
+      <script type="application/ld+json" set:html={JSON.stringify(item)} />
+    ))}
   </head>
   <body class="theme-paper accent-coral grid-regular">
     <slot />
