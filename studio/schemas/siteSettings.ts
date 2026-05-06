@@ -18,6 +18,12 @@ export const siteSettings = defineType({
       type: 'localizedString',
     }),
     defineField({
+      name: 'heroIntro',
+      title: 'Parágrafo de introdução (hero)',
+      description: 'Parágrafo curto sob a frase principal. Descreve a prática/obra de forma poética. Independente de qualquer obra específica.',
+      type: 'localizedText',
+    }),
+    defineField({
       name: 'heroArtwork',
       title: 'Obra destacada (hero)',
       description: 'A obra que aparece em destaque na homepage',

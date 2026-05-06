@@ -67,6 +67,7 @@ export interface SiteEvent {
 export interface SiteSettings {
   siteName: string;
   heroHeadline: LocalizedString;
+  heroIntro?: LocalizedText;
   heroArtwork: Artwork;
   tagline: LocalizedString;
   studioLocation: LocalizedString;

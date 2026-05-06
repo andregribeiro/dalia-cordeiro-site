@@ -185,11 +185,11 @@ a.evt:hover .evt-arrow { color: var(--accent); transform: translateX(2px); }
 }
 
 /* HERO */
-.hero { padding: 56px 0 70px; position: relative; }
+.hero { padding: 36px 0 56px; position: relative; }
 .hero-grid {
   display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: 80px;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
   align-items: center;
 }
 .hero h1 {
@@ -236,6 +236,8 @@ a.evt:hover .evt-arrow { color: var(--accent); transform: translateX(2px); }
 .hero-featured {
   position: relative;
   aspect-ratio: 4/5;
+  max-height: 62vh;
+  margin: 0 auto;
   overflow: hidden;
   box-shadow: 0 30px 60px -30px rgba(31, 27, 22, 0.35),
               0 12px 24px -12px rgba(31, 27, 22, 0.18);
