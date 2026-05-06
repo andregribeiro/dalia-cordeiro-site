@@ -791,7 +791,7 @@ def build():
         '<b>Bom uso.</b><br/>'
         'O site foi pensado para ser autónomo e duradouro — todas as decisões '
         'foram tomadas para a artista poder editar, publicar e crescer sem depender de '
-        'ninguém para cada pequena alteração. Boa pintura.',
+        'ninguém para cada pequena alteração.',
         S['lead']))
 
     doc.build(story)
