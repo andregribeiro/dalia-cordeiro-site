@@ -57,12 +57,8 @@ if (showUpcoming && upcoming) items.push({ kind: 'upcoming', ev: upcoming });
             <span class="evt-dot" aria-hidden="true"></span>
             <span class="evt-label">{kind === 'upcoming' ? labels[lang].upcoming : labels[lang].past}</span>
             {title && <span class="evt-title">{title}</span>}
-            {(venue || date) && (
-              <span class="evt-meta">
-                {venue && <span class="evt-venue">{venue}</span>}
-                {date && <span class="evt-date">{date}</span>}
-              </span>
-            )}
+            {venue && <span class="evt-venue">{venue}</span>}
+            {date && <span class="evt-date">{date}</span>}
             {linkProps && <span class="evt-arrow" aria-hidden="true">↗</span>}
           </>
         );

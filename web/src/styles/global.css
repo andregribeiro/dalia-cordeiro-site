@@ -139,7 +139,7 @@ body::after {
 .nav-drawer { display: none; }
 .nav-backdrop { display: none; }
 
-/* EVENT NOTICE — editorial agenda strip */
+/* EVENT NOTICE — editorial single-row agenda */
 .event-notice {
   border-bottom: 1px solid var(--line);
   background: var(--paper-2);
@@ -149,36 +149,34 @@ body::after {
 .event-notice-inner {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 14px 40px;
+  padding: 11px 40px;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 6px 56px;
+  align-items: baseline;
+  justify-content: center;
 }
 .evt {
-  display: grid;
-  grid-template-columns: 9px minmax(64px, auto) 1fr auto auto;
+  display: inline-flex;
   align-items: baseline;
-  gap: 16px;
+  gap: 14px;
   color: var(--ink-soft);
   text-decoration: none;
-  padding: 5px 0;
   transition: color .2s;
-  font-feature-settings: "lnum" 0, "onum" 1;
+  flex-wrap: wrap;
 }
-.evt-past { opacity: 0.6; }
+.evt-past { opacity: 0.55; }
 .evt-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  align-self: center;
   background: var(--accent);
-  transform: translateY(0);
+  align-self: center;
+  flex-shrink: 0;
 }
 .evt-past .evt-dot {
   background: transparent;
   border: 1px solid var(--muted);
-  width: 7px;
-  height: 7px;
   box-sizing: border-box;
 }
 .evt-label {
@@ -193,26 +191,25 @@ body::after {
 .evt-past .evt-label { color: var(--muted); }
 .evt-title {
   font-family: var(--serif);
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 500;
   color: var(--ink);
   letter-spacing: -0.005em;
   transition: color .2s;
-  min-width: 0;
 }
-.evt-meta {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 14px;
+.evt-venue {
   font-family: var(--serif);
   font-style: italic;
   font-size: 13.5px;
   color: var(--ink-soft);
   white-space: nowrap;
 }
-.evt-venue { color: var(--ink-soft); }
 .evt-date {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13.5px;
   color: var(--ink-soft);
+  white-space: nowrap;
   font-variant-numeric: oldstyle-nums;
   font-feature-settings: "onum" 1;
 }
@@ -220,29 +217,27 @@ body::after {
   font-family: var(--sans);
   font-size: 15px;
   color: var(--muted);
-  margin-left: 2px;
-  transition: transform .25s, color .2s;
   align-self: center;
+  transition: transform .25s, color .2s;
 }
 a.evt:hover .evt-title { color: var(--accent); }
 a.evt:hover .evt-arrow { color: var(--accent); transform: translate(3px, -3px); }
 
-@media (max-width: 800px) {
-  .evt {
-    grid-template-columns: 9px minmax(60px, auto) 1fr auto;
-    gap: 12px;
-  }
-  .evt-meta { display: none; }
+@media (max-width: 1100px) {
+  .evt-venue { display: none; }
 }
-@media (max-width: 700px) {
-  .event-notice-inner { padding: 12px 22px; gap: 8px; }
-  .evt {
-    grid-template-columns: 9px 1fr auto;
-    gap: 12px;
-    padding: 4px 0;
+@media (max-width: 900px) {
+  .event-notice-inner {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 11px 22px;
   }
+}
+@media (max-width: 480px) {
+  .evt { gap: 10px; }
   .evt-label { display: none; }
-  .evt-title { font-size: 15px; }
+  .evt-title { font-size: 14px; }
 }
 
 /* HERO */
