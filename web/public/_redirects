@@ -1,0 +1,4 @@
+# Holding-page branch only — catch any old URL (e.g. /pt/sobre/, /en/contact/)
+# and serve the single index.html with status 200. Visitors see the holding
+# page regardless of the path they arrived on.
+/*  /index.html  200
