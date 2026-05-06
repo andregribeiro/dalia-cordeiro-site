@@ -213,15 +213,7 @@ body::after {
   font-variant-numeric: oldstyle-nums;
   font-feature-settings: "onum" 1;
 }
-.evt-arrow {
-  font-family: var(--sans);
-  font-size: 15px;
-  color: var(--muted);
-  align-self: center;
-  transition: transform .25s, color .2s;
-}
 a.evt:hover .evt-title { color: var(--accent); }
-a.evt:hover .evt-arrow { color: var(--accent); transform: translate(3px, -3px); }
 
 @media (max-width: 1100px) {
   .evt-venue { display: none; }

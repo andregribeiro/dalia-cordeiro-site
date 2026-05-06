@@ -59,7 +59,6 @@ if (showUpcoming && upcoming) items.push({ kind: 'upcoming', ev: upcoming });
             {title && <span class="evt-title">{title}</span>}
             {venue && <span class="evt-venue">{venue}</span>}
             {date && <span class="evt-date">{date}</span>}
-            {linkProps && <span class="evt-arrow" aria-hidden="true">↗</span>}
           </>
         );
         return linkProps ? (
