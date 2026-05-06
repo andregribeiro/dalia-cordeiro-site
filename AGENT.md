@@ -15,7 +15,7 @@ Monorepo with two workspaces:
 
 **Live targets**:
 - Production domain (canonical): `https://www.daliacordeiroart.com` (configured in `web/astro.config.ts`). Apex `daliacordeiroart.com` 301-redirects to www via Cloudflare Redirect Rule at the zone level.
-- Cloudflare Pages project: `dalia-cordeiro-site` → `dalia-cordeiro-site.pages.dev` (this URL 301-redirects to the canonical domain via `web/public/_redirects`)
+- Cloudflare Pages project: `dalia-cordeiro-site` → `dalia-cordeiro-site.pages.dev` (this URL 301-redirects to the canonical domain via the Pages Function at `functions/_middleware.js`; static-file `_redirects` host matching is not honoured for the project's bare *.pages.dev URL).
 - Sanity Studio: `https://daliacordeiro.sanity.studio`
 
 **Sanity**: project `gwtbwm5k`, dataset `production`, org `oMtlogN6C`.
@@ -90,9 +90,13 @@ dalia-cordeiro-site/
 │       │   └── helpers.ts              # loc() — localized field with PT fallback
 │       ├── pages/
 │       │   ├── index.astro             # Root redirect (Accept-Language)
-│       │   ├── pt/{index,sobre,contacto}.astro
-│       │   └── en/{index,about,contact}.astro
+│       │   ├── 404.astro               # Bilingual 404 (CF Pages serves as fallback)
+│       │   ├── pt/{index,sobre,contacto,termos}.astro
+│       │   └── en/{index,about,contact,terms}.astro
 │       └── styles/{global,fonts}.css
+│
+├── functions/                          # CF Pages Functions (repo root, NOT inside web/)
+│   └── _middleware.js                  # Redirect bare *.pages.dev → canonical www
 │
 ├── studio/                             # Sanity Studio
 │   ├── sanity.config.ts                # Structure, language filter, singletons
@@ -115,7 +119,7 @@ dalia-cordeiro-site/
 
 ## Architecture Rules (do not violate)
 
-- **Static output only** (`output: 'static'`). No SSR, no Cloudflare adapter.
+- **Static output only** (`output: 'static'`). No SSR, no Cloudflare adapter. The single Pages Function at `functions/_middleware.js` is a CF-platform addition for the *.pages.dev → www redirect — it does NOT change Astro's output mode and must not grow into request-handling logic.
 - **React islands** (`client:load`) only for `WorkGrid.tsx` and `ContactForm.tsx`. Everything else is `.astro` (zero client JS).
 - **Sanity data fetched at build time** via GROQ queries in `web/src/lib/queries.ts`. Image URLs pre-computed server-side via `urlFor()`.
 - **Pass data as serialized props from Astro to React islands.** Never inline the Sanity client inside a React island.
