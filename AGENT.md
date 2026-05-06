@@ -15,7 +15,7 @@ Monorepo with two workspaces:
 
 **Live targets**:
 - Production domain (canonical): `https://www.daliacordeiroart.com` (configured in `web/astro.config.ts`). Apex `daliacordeiroart.com` 301-redirects to www via Cloudflare Redirect Rule at the zone level.
-- Cloudflare Pages: `dalia-cordeiro.pages.dev`
+- Cloudflare Pages project: `dalia-cordeiro-site` → `dalia-cordeiro-site.pages.dev` (this URL 301-redirects to the canonical domain via `web/public/_redirects`)
 - Sanity Studio: `https://daliacordeiro.sanity.studio`
 
 **Sanity**: project `gwtbwm5k`, dataset `production`, org `oMtlogN6C`.
@@ -62,7 +62,7 @@ pnpm dev:studio                    # Sanity Studio   → http://localhost:3333
 pnpm build:web                     # Build static site to web/dist/
 pnpm build:studio                  # Build Studio (rarely needed locally)
 node scripts/import-from-data.js   # Migrate prototype data → Sanity (idempotent)
-wrangler pages deploy web/dist --project-name dalia-cordeiro   # Manual CF deploy
+wrangler pages deploy web/dist --project-name dalia-cordeiro-site   # Manual CF deploy
 ```
 
 ---
@@ -208,7 +208,7 @@ Code push to main ──┐
 Sanity publish ─────┘                                          (Sanity webhook → CF Deploy Hook)
 ```
 
-- Cloudflare Pages project: `dalia-cordeiro` (account: `daliacordeiro.studio@outlook.com`).
+- Cloudflare Pages project: `dalia-cordeiro-site` (account: `daliacordeiro.studio@outlook.com`).
 - Build cmd: `pnpm install --frozen-lockfile && pnpm build:web`, output dir `web/dist`.
 - Sanity webhook (Create/Update/Delete on `production`, drafts excluded) hits a CF Deploy Hook; CF rebuilds main.
 - The previous `.github/workflows/deploy.yml` (wrangler-action) was removed in favor of the CF git integration.
@@ -217,7 +217,7 @@ Sanity publish ─────┘                                          (Sani
 
 ```bash
 pnpm build:web
-wrangler pages deploy web/dist --project-name dalia-cordeiro
+wrangler pages deploy web/dist --project-name dalia-cordeiro-site
 ```
 
 ---

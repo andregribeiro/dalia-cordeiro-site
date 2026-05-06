@@ -1,0 +1,4 @@
+# Redirect the bare CF Pages production URL to the canonical domain.
+# Branch/preview URLs (<branch>.dalia-cordeiro-site.pages.dev) are not
+# matched by this rule and remain accessible for testing.
+https://dalia-cordeiro-site.pages.dev/* https://www.daliacordeiroart.com/:splat 301!
