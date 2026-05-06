@@ -45,6 +45,7 @@ if (showUpcoming && upcoming) items.push({ kind: 'upcoming', ev: upcoming });
 {showStrip && (
   <aside class="event-notice" aria-label={labels[lang].region}>
     <div class="event-notice-inner">
+      <span class="evt-section">{labels[lang].region}</span>
       {items.map(({ kind, ev }) => {
         const title = loc(ev.title, lang);
         const venue = loc(ev.venue, lang);

@@ -152,9 +152,30 @@ body::after {
   padding: 11px 40px;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 56px;
+  gap: 6px 44px;
   align-items: baseline;
   justify-content: center;
+}
+.evt-section {
+  font-family: var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  position: relative;
+  padding-right: 22px;
+}
+.evt-section::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 11px;
+  background: var(--line);
 }
 .evt {
   display: inline-flex;
@@ -225,6 +246,8 @@ a.evt:hover .evt-title { color: var(--accent); }
     align-items: flex-start;
     padding: 11px 22px;
   }
+  .evt-section { padding-right: 0; padding-bottom: 4px; }
+  .evt-section::after { display: none; }
 }
 @media (max-width: 480px) {
   .evt { gap: 10px; }
