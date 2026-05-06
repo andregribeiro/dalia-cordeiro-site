@@ -3,7 +3,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://daliacordeiroart.com',
+  site: 'https://www.daliacordeiroart.com',
   output: 'static',
   integrations: [
     react(),

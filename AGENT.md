@@ -14,7 +14,7 @@ Monorepo with two workspaces:
 - `studio/` — Sanity Studio v3 (CMS admin panel)
 
 **Live targets**:
-- Production domain: `https://daliacordeiroart.com` (configured in `web/astro.config.ts`; DNS may still be pending)
+- Production domain (canonical): `https://www.daliacordeiroart.com` (configured in `web/astro.config.ts`). Apex `daliacordeiroart.com` 301-redirects to www via Cloudflare Redirect Rule at the zone level.
 - Cloudflare Pages: `dalia-cordeiro.pages.dev`
 - Sanity Studio: `https://daliacordeiro.sanity.studio`
 
