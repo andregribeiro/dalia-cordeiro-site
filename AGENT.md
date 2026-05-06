@@ -234,6 +234,24 @@ wrangler pages deploy web/dist --project-name dalia-cordeiro-site
 
 ---
 
+## Email
+
+- **Public address (inbound)**: `studio@daliacordeiroart.com` — advertised on the contact and terms pages, in the JSON-LD `VisualArtist.email`, and in `scripts/import-from-data.js` (`siteSettings.contactEmail`).
+- **Delivery mechanism**: **Cloudflare Email Routing** on the `daliacordeiroart.com` zone (free, no forwarding limit).
+  - Route: `studio@daliacordeiroart.com` → `daliacordeiro.studio@outlook.com`
+  - Catch-all (recommended setup): `*@daliacordeiroart.com` → `daliacordeiro.studio@outlook.com` so legacy / cards-printed addresses don't bounce.
+  - DNS records (3 MX `route{1,2,3}.mx.cloudflare.net.` + SPF TXT `v=spf1 include:_spf.mx.cloudflare.net ~all`) are managed automatically by Email Routing — do not edit by hand.
+- **Limitation — inbound only**: Email Routing does NOT let the artist *send* as `studio@daliacordeiroart.com`. Replies leave the Outlook account and the recipient sees `daliacordeiro.studio@outlook.com`. To send-as the custom address would require Google Workspace / Microsoft 365 (~5 €/user/month) or an SMTP relay (SendGrid/Mailgun free tiers); not configured today, agreed deferral.
+- **Verifying inbound delivery**:
+  ```bash
+  dig @1.1.1.1 +short daliacordeiroart.com MX   # 3 lines, route1/2/3.mx.cloudflare.net
+  dig @1.1.1.1 +short daliacordeiroart.com TXT  # contains "v=spf1 include:_spf.mx.cloudflare.net ~all"
+  ```
+  Then send a test email from another account to `studio@daliacordeiroart.com` — should land in the Outlook inbox within seconds.
+- **Web3Forms is independent**: the contact form on `/pt/contacto/` and `/en/contact/` POSTs to Web3Forms, which delivers to the same Outlook inbox via its own pipeline. Disabling Email Routing would not affect the form; disabling Web3Forms would not affect direct emails.
+
+---
+
 ## Migration Script
 
 ```bash
