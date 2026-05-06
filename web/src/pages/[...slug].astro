@@ -1,0 +1,24 @@
+---
+// Generates an actual index.html at every path that existed in the previous
+// production deploy (and a few likely variants). Each file ships the holding
+// page, which forces CF Pages to invalidate its internal per-path cache for
+// these URLs — the `_redirects` rewrite alone wasn't enough because CF Pages
+// kept serving the old asset for paths that previously had a physical file.
+import HoldingPage from '../components/HoldingPage.astro';
+
+export function getStaticPaths() {
+  const paths = [
+    'pt',
+    'pt/sobre',
+    'pt/contacto',
+    'pt/termos',
+    'en',
+    'en/about',
+    'en/contact',
+    'en/terms',
+    '404',
+  ];
+  return paths.map((slug) => ({ params: { slug } }));
+}
+---
+<HoldingPage />
