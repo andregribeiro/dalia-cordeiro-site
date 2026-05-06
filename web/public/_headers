@@ -1,6 +1,8 @@
-# Signal to AI training pipelines that this content is reserved.
-# Applied by Cloudflare Pages to all served responses (HTML/CSS/JS/etc.).
-# Note: artwork images are served by cdn.sanity.io and are out of scope here;
-# the same signal is provided in the page <head> meta tags.
+# Holding-page branch — aggressive no-cache so visitors get a fresh holding
+# page (and so the relaunch back to main is immediate, with no stale HTML
+# pinned on edges/browsers).
 /*
-  X-Robots-Tag: noai, noimageai
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  CDN-Cache-Control: no-store
+  Cloudflare-CDN-Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow, noai, noimageai
