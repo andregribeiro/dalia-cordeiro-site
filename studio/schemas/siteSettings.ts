@@ -31,11 +31,6 @@ export const siteSettings = defineType({
       to: [{ type: 'artwork' }],
     }),
     defineField({
-      name: 'studioLocation',
-      title: 'Localização do atelier',
-      type: 'localizedString',
-    }),
-    defineField({
       name: 'contactEmail',
       title: 'Email de contacto',
       type: 'string',

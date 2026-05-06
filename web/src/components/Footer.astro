@@ -4,12 +4,11 @@ import type { LocalizedString } from '../lib/types';
 
 interface Props {
   lang: Lang;
-  studioLocation?: LocalizedString;
   footerText?: LocalizedString;
   instagramUrl?: string;
 }
 
-const { lang, studioLocation, footerText, instagramUrl = 'https://www.instagram.com/dalia_cordeiro_art/' } = Astro.props;
+const { lang, footerText, instagramUrl = 'https://www.instagram.com/dalia_cordeiro_art/' } = Astro.props;
 
 function loc(field: LocalizedString | undefined, fallback: string): string {
   if (!field) return fallback;
@@ -18,7 +17,6 @@ function loc(field: LocalizedString | undefined, fallback: string): string {
 ---
 
 <footer class="wrap">
-  <div>{loc(studioLocation, lang === 'pt' ? 'Atelier — Porto, Portugal' : 'Studio — Porto, Portugal')}</div>
   <div>
     <a class="ig-link" href={instagramUrl} target="_blank" rel="noreferrer">@dalia_cordeiro_art</a>
   </div>

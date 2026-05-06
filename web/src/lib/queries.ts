@@ -19,7 +19,7 @@ export const allArtworksQuery = `
 export const siteSettingsQuery = `
   *[_id == "siteSettings"][0] {
     siteName, heroHeadline, heroIntro,
-    studioLocation, contactEmail, instagramUrl,
+    contactEmail, instagramUrl,
     defaultSeoImage, footerText,
     upcomingEvent, recentPastEvent,
     heroArtwork-> {
