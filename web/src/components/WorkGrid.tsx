@@ -70,7 +70,7 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
       if (!s?.key || seen.has(s.key)) continue;
       seen.set(s.key, {
         key: s.key,
-        label: loc(s.title, lang) || s.key,
+        label: s.title || s.key,
         order: s.displayOrder ?? 0,
       });
     }
@@ -134,7 +134,7 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
               <div className="card-img">
                 <img
                   src={imageUrls[w._id]}
-                  alt={loc(w.image?.alt, lang) || `${loc(w.series?.title, lang)} — ${w.code}`}
+                  alt={loc(w.image?.alt, lang) || `${w.series?.title ?? ''} — ${w.code}`}
                   loading="lazy"
                   decoding="async"
                   width="600"
@@ -146,7 +146,7 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
                 </span>
               </div>
               <div className="card-meta">
-                <span className="card-title">{loc(w.series?.title, lang)}</span>
+                <span className="card-title">{w.series?.title ?? ''}</span>
                 <span className="card-year">{w.year}</span>
               </div>
               <div className="card-medium">
@@ -227,7 +227,7 @@ function Modal({ work, works, lang, imageUrls, onClose, onNavigate, contactUrl }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [work, works, onClose]);
 
-  const seriesTitle = loc(work.series?.title, lang);
+  const seriesTitle = work.series?.title ?? '';
   const inquireUrl = `${contactUrl}?code=${encodeURIComponent(work.code)}&series=${encodeURIComponent(seriesTitle)}&year=${work.year}`;
   const navLabels = lang === 'pt'
     ? { prev: 'Obra anterior', next: 'Obra seguinte' }

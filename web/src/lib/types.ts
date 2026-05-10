@@ -13,7 +13,7 @@ export interface LocalizedText {
 export interface Series {
   _id: string;
   key: string;
-  title: LocalizedString;
+  title: string;
   medium?: LocalizedString;
   description?: LocalizedText;
   displayOrder: number;

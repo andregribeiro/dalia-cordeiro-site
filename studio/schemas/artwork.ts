@@ -119,7 +119,7 @@ export const artwork = defineType({
       year: 'year',
       media: 'image',
       status: 'status',
-      seriesTitle: 'series.title.pt',
+      seriesTitle: 'series.title',
     },
     prepare({ code, year, media, status, seriesTitle }) {
       return {

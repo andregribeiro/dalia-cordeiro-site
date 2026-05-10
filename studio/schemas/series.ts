@@ -19,7 +19,8 @@ export const series = defineType({
     defineField({
       name: 'title',
       title: 'Nome da série',
-      type: 'localizedString',
+      description: 'Nome único da série, igual em português e inglês (ex: Metamorfoses).',
+      type: 'string',
       validation: (r) => r.required(),
     }),
     defineField({
@@ -49,7 +50,7 @@ export const series = defineType({
     },
   ],
   preview: {
-    select: { title: 'title.pt', key: 'key' },
+    select: { title: 'title', key: 'key' },
     prepare({ title, key }) {
       return { title: title || key || 'Série sem nome', subtitle: key };
     },

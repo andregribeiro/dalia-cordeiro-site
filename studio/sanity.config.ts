@@ -24,9 +24,40 @@ export default defineConfig({
           .title('Conteúdo')
           .items([
             S.listItem()
-              .title('Obras')
-              .schemaType('artwork')
-              .child(S.documentTypeList('artwork').title('Obras')),
+              .title('Séries')
+              .schemaType('series')
+              .child(
+                S.documentTypeList('series')
+                  .title('Séries')
+                  .child((seriesId) =>
+                    S.list()
+                      .title('Série')
+                      .items([
+                        S.listItem()
+                          .title('Editar esta série')
+                          .id('edit-series')
+                          .child(
+                            S.document()
+                              .schemaType('series')
+                              .documentId(seriesId),
+                          ),
+                        S.listItem()
+                          .title('Obras desta série')
+                          .id('series-artworks')
+                          .child(
+                            S.documentTypeList('artwork')
+                              .title('Obras desta série')
+                              .filter('_type == "artwork" && references($seriesId)')
+                              .params({ seriesId })
+                              .initialValueTemplates([
+                                S.initialValueTemplateItem('artwork-in-series', {
+                                  seriesId,
+                                }),
+                              ]),
+                          ),
+                      ]),
+                  ),
+              ),
             S.divider(),
             singletonListItem(S, 'about', 'Sobre'),
             singletonListItem(S, 'siteSettings', 'Definições do Site'),
@@ -44,8 +75,18 @@ export default defineConfig({
   ],
   schema: {
     types: schemaTypes,
-    templates: (templates) =>
-      templates.filter(({ schemaType }) => !singletonTypes.has(schemaType)),
+    templates: (prev) => [
+      ...prev.filter(({ schemaType }) => !singletonTypes.has(schemaType)),
+      {
+        id: 'artwork-in-series',
+        title: 'Obra nesta série',
+        schemaType: 'artwork',
+        parameters: [{ name: 'seriesId', type: 'string' }],
+        value: ({ seriesId }: { seriesId: string }) => ({
+          series: { _type: 'reference', _ref: seriesId },
+        }),
+      },
+    ],
   },
   document: {
     actions: (input, context) =>
