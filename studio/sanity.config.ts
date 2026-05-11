@@ -62,17 +62,13 @@ export default defineConfig({
                   ),
               ),
             S.divider(),
-            S.listItem()
-              .title('Reordenar séries')
-              .id('reorder-series')
-              .child(
-                orderableDocumentListDeskItem({
-                  type: 'series',
-                  title: 'Reordenar séries (arrastar)',
-                  S,
-                  context,
-                }),
-              ),
+            orderableDocumentListDeskItem({
+              type: 'series',
+              title: 'Reordenar séries',
+              id: 'reorder-series',
+              S,
+              context,
+            }),
             S.divider(),
             singletonListItem(S, 'about', 'Sobre'),
             singletonListItem(S, 'siteSettings', 'Definições do Site'),
