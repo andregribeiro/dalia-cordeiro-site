@@ -59,27 +59,23 @@ interface Props {
 }
 
 export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, contactUrl }: Props) {
-  const [seriesKey, setSeriesKey] = useState('all');
+  const [seriesId, setSeriesId] = useState('all');
   const [status, setStatus] = useState('all');
   const [openWork, setOpenWork] = useState<Artwork | null>(null);
 
   const allSeries = useMemo(() => {
-    const seen = new Map<string, { key: string; label: string; order: number }>();
+    const seen = new Map<string, { id: string; label: string }>();
     for (const w of artworks) {
       const s = w.series;
-      if (!s?.key || seen.has(s.key)) continue;
-      seen.set(s.key, {
-        key: s.key,
-        label: s.title || s.key,
-        order: s.displayOrder ?? 0,
-      });
+      if (!s?._id || seen.has(s._id)) continue;
+      seen.set(s._id, { id: s._id, label: s.title || 'Sem nome' });
     }
-    return Array.from(seen.values()).sort((a, b) => a.order - b.order);
-  }, [artworks, lang]);
+    return Array.from(seen.values());
+  }, [artworks]);
 
   const filtered = artworks.filter(
     (w) =>
-      (seriesKey === 'all' || w.series?.key === seriesKey) &&
+      (seriesId === 'all' || w.series?._id === seriesId) &&
       (status === 'all' || w.status === status),
   );
 
@@ -98,16 +94,16 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
           <div className="filter-group">
             <span className="filter-label">{t(lang, 'filter_series')}</span>
             <button
-              className={`chip${seriesKey === 'all' ? ' on' : ''}`}
-              onClick={() => setSeriesKey('all')}
+              className={`chip${seriesId === 'all' ? ' on' : ''}`}
+              onClick={() => setSeriesId('all')}
             >
               {t(lang, 'all')}
             </button>
             {allSeries.map((s) => (
               <button
-                key={s.key}
-                className={`chip${seriesKey === s.key ? ' on' : ''}`}
-                onClick={() => setSeriesKey(s.key)}
+                key={s.id}
+                className={`chip${seriesId === s.id ? ' on' : ''}`}
+                onClick={() => setSeriesId(s.id)}
               >
                 {s.label}
               </button>

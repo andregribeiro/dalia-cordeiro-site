@@ -8,7 +8,6 @@ const ui = {
     message: 'Mensagem',
     send: 'Enviar pedido',
     sent: 'Obrigada — mensagem enviada.',
-    inquiry_for: 'Pedido para',
     error: 'Erro ao enviar. Tente novamente.',
   },
   en: {
@@ -17,7 +16,6 @@ const ui = {
     message: 'Message',
     send: 'Send inquiry',
     sent: 'Thank you — message sent.',
-    inquiry_for: 'Inquiry for',
     error: 'Failed to send. Please try again.',
   },
 } as const;
@@ -27,43 +25,89 @@ interface Props {
   accessKey: string;
 }
 
+interface InquiryMeta {
+  code?: string;
+  series?: string;
+  year?: string;
+}
+
+function buildPrefill(lang: Lang, meta: InquiryMeta): string {
+  if (!meta.code) return '';
+  const labels =
+    lang === 'pt'
+      ? {
+          intro: 'Venho por este meio pedir informação sobre a seguinte obra:',
+          ref: 'Referência',
+          series: 'Série',
+          year: 'Ano',
+        }
+      : {
+          intro: 'I would like to inquire about the following work:',
+          ref: 'Reference',
+          series: 'Series',
+          year: 'Year',
+        };
+  const lines = [
+    labels.intro,
+    '',
+    `• ${labels.ref}: ${meta.code}`,
+    meta.series ? `• ${labels.series}: ${meta.series}` : null,
+    meta.year ? `• ${labels.year}: ${meta.year}` : null,
+    '',
+    '',
+  ].filter((l): l is string => l !== null);
+  return lines.join('\n');
+}
+
+function buildSubject(lang: Lang, name: string, meta: InquiryMeta): string {
+  const ref = [meta.code, meta.series].filter(Boolean).join(' · ');
+  if (ref) {
+    return lang === 'pt'
+      ? `Pedido sobre ${ref} — ${name}`
+      : `Inquiry about ${ref} — ${name}`;
+  }
+  return lang === 'pt' ? `Pedido de contacto — ${name}` : `Contact inquiry — ${name}`;
+}
+
 export default function ContactForm({ lang, accessKey }: Props) {
   const t = ui[lang];
   const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [meta, setMeta] = useState<InquiryMeta>({});
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
-  // Pre-fill message from query params (?code=...&series=...&year=...)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const code = params.get('code');
-    const series = params.get('series');
-    const year = params.get('year');
-    if (code) {
-      const ref = series ? `${code} (${series}, ${year ?? ''})` : `${code} (${year ?? ''})`;
-      const prefix =
-        lang === 'pt'
-          ? `Venho por este meio pedir informação sobre a obra ${ref}.\n\n`
-          : `I'm writing to inquire about work ${ref}.\n\n`;
-      setForm((f) => ({ ...f, message: prefix }));
-    }
+    const next: InquiryMeta = {
+      code: params.get('code') ?? undefined,
+      series: params.get('series') ?? undefined,
+      year: params.get('year') ?? undefined,
+    };
+    setMeta(next);
+    const prefill = buildPrefill(lang, next);
+    if (prefill) setForm((f) => ({ ...f, message: prefill }));
   }, [lang]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
 
+    const payload: Record<string, unknown> = {
+      access_key: accessKey,
+      name: form.name,
+      email: form.email,
+      message: form.message,
+      from_name: 'Dália Cordeiro Website',
+      subject: buildSubject(lang, form.name, meta),
+    };
+    if (meta.code) payload.obra = meta.code;
+    if (meta.series) payload.serie = meta.series;
+    if (meta.year) payload.ano = meta.year;
+
     try {
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: accessKey,
-          name: form.name,
-          email: form.email,
-          message: form.message,
-          from_name: 'Dália Cordeiro Website',
-          subject: `Inquiry from ${form.name}`,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {

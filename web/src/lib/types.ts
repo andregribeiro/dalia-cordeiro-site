@@ -12,11 +12,9 @@ export interface LocalizedText {
 
 export interface Series {
   _id: string;
-  key: string;
   title: string;
   medium?: LocalizedString;
   description?: LocalizedText;
-  displayOrder: number;
 }
 
 export interface Artwork {
@@ -30,7 +28,6 @@ export interface Artwork {
   series: Series;
   status: 'available' | 'sold' | 'reserved' | 'nfs';
   description: LocalizedText;
-  displayOrder: number;
 }
 
 export interface AboutStat {

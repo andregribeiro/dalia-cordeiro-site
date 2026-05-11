@@ -1,17 +1,17 @@
 export const allSeriesQuery = `
-  *[_type == "series"] | order(displayOrder asc) {
-    _id, key, title, medium, description, displayOrder
+  *[_type == "series"] | order(orderRank asc) {
+    _id, title, medium, description
   }
 `;
 
 export const allArtworksQuery = `
-  *[_type == "artwork"] | order(displayOrder asc) {
+  *[_type == "artwork"] | order(series->orderRank asc, year desc, _createdAt desc) {
     _id, code, image, additionalImages,
-    year, dimensions, status, displayOrder,
+    year, dimensions, status,
     "medium": coalesce(mediumOverride, series->medium),
     "description": coalesce(descriptionOverride, series->description),
     series-> {
-      _id, key, title, displayOrder
+      _id, title
     }
   }
 `;
@@ -26,7 +26,7 @@ export const siteSettingsQuery = `
       _id, code, image, year, dimensions, status,
       "medium": coalesce(mediumOverride, series->medium),
       "description": coalesce(descriptionOverride, series->description),
-      series-> { _id, key, title, displayOrder }
+      series-> { _id, title }
     }
   }
 `;

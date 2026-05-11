@@ -1,7 +1,7 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
-import { visionTool } from '@sanity/vision';
 import { languageFilter } from '@sanity/language-filter';
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list';
 import { schemaTypes } from './schemas';
 
 const singletonTypes = new Set(['about', 'siteSettings']);
@@ -19,16 +19,16 @@ export default defineConfig({
   dataset: 'production',
   plugins: [
     structureTool({
-      structure: (S) =>
+      structure: (S, context) =>
         S.list()
           .title('Conteúdo')
           .items([
             S.listItem()
               .title('Séries')
-              .schemaType('series')
+              .id('series-list')
               .child(
                 S.documentTypeList('series')
-                  .title('Séries')
+                  .title('Séries (arrastar para reordenar)')
                   .child((seriesId) =>
                     S.list()
                       .title('Série')
@@ -49,6 +49,9 @@ export default defineConfig({
                               .title('Obras desta série')
                               .filter('_type == "artwork" && references($seriesId)')
                               .params({ seriesId })
+                              .defaultOrdering([
+                                { field: 'year', direction: 'desc' },
+                              ])
                               .initialValueTemplates([
                                 S.initialValueTemplateItem('artwork-in-series', {
                                   seriesId,
@@ -59,11 +62,22 @@ export default defineConfig({
                   ),
               ),
             S.divider(),
+            S.listItem()
+              .title('Reordenar séries')
+              .id('reorder-series')
+              .child(
+                orderableDocumentListDeskItem({
+                  type: 'series',
+                  title: 'Reordenar séries (arrastar)',
+                  S,
+                  context,
+                }),
+              ),
+            S.divider(),
             singletonListItem(S, 'about', 'Sobre'),
             singletonListItem(S, 'siteSettings', 'Definições do Site'),
           ]),
     }),
-    visionTool(),
     languageFilter({
       supportedLanguages: [
         { id: 'pt', title: 'Português' },

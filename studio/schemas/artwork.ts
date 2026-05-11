@@ -4,18 +4,26 @@ export const artwork = defineType({
   name: 'artwork',
   title: 'Obra',
   type: 'document',
+  fieldsets: [
+    {
+      name: 'overrides',
+      title: 'Substituir informação herdada da série (opcional)',
+      description: 'Só preencher se esta obra precisa de técnica ou descrição diferentes da série.',
+      options: { collapsible: true, collapsed: true },
+    },
+  ],
   fields: [
     defineField({
       name: 'code',
       title: 'Código (referência)',
-      description: 'Identificador curto e único da obra (ex: M-001). Usado para referências em emails de clientes — as obras não têm nome.',
+      description: 'Identificador curto e único da obra (ex: M-001). Aparece nos pedidos de contacto para identificar a obra.',
       type: 'string',
       validation: (r) => r.required(),
     }),
     defineField({
       name: 'series',
       title: 'Série',
-      description: 'A série a que esta obra pertence. O nome, técnica e descrição da série são herdados a menos que sejam substituídos abaixo.',
+      description: 'A série a que esta obra pertence. Pré-preenchida quando a obra é criada dentro de uma série.',
       type: 'reference',
       to: [{ type: 'series' }],
       validation: (r) => r.required(),
@@ -29,6 +37,7 @@ export const artwork = defineType({
         {
           name: 'alt',
           title: 'Texto alternativo',
+          description: 'Descrição curta da imagem para leitores de ecrã e SEO.',
           type: 'localizedString',
         },
       ],
@@ -37,6 +46,7 @@ export const artwork = defineType({
     defineField({
       name: 'additionalImages',
       title: 'Imagens adicionais',
+      description: 'Vistas detalhadas, contextos do atelier, costas da obra, etc. Opcional.',
       type: 'array',
       of: [
         {
@@ -68,18 +78,6 @@ export const artwork = defineType({
       ],
     }),
     defineField({
-      name: 'mediumOverride',
-      title: 'Técnica (substitui a série)',
-      description: 'Opcional. Só preencher se esta obra usa uma técnica diferente da série.',
-      type: 'localizedString',
-    }),
-    defineField({
-      name: 'descriptionOverride',
-      title: 'Descrição (substitui a série)',
-      description: 'Opcional. Só preencher se esta obra precisa de uma descrição própria, distinta da série.',
-      type: 'localizedText',
-    }),
-    defineField({
       name: 'status',
       title: 'Estado',
       type: 'string',
@@ -95,22 +93,28 @@ export const artwork = defineType({
       initialValue: 'available',
     }),
     defineField({
-      name: 'displayOrder',
-      title: 'Ordem de exibição',
-      type: 'number',
-      initialValue: 0,
+      name: 'mediumOverride',
+      title: 'Técnica (substitui a série)',
+      type: 'localizedString',
+      fieldset: 'overrides',
+    }),
+    defineField({
+      name: 'descriptionOverride',
+      title: 'Descrição (substitui a série)',
+      type: 'localizedText',
+      fieldset: 'overrides',
     }),
   ],
   orderings: [
     {
-      title: 'Ordem de exibição',
-      name: 'displayOrder',
-      by: [{ field: 'displayOrder', direction: 'asc' }],
-    },
-    {
-      title: 'Ano (recente)',
+      title: 'Ano (recente primeiro)',
       name: 'yearDesc',
       by: [{ field: 'year', direction: 'desc' }],
+    },
+    {
+      title: 'Código (A → Z)',
+      name: 'codeAsc',
+      by: [{ field: 'code', direction: 'asc' }],
     },
   ],
   preview: {

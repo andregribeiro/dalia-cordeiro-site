@@ -1,21 +1,11 @@
 import { defineType, defineField } from 'sanity';
+import { orderRankField } from '@sanity/orderable-document-list';
 
 export const series = defineType({
   name: 'series',
   title: 'Série',
   type: 'document',
   fields: [
-    defineField({
-      name: 'key',
-      title: 'Chave (identificador)',
-      description: 'Identificador curto, sem espaços (ex: metamorphoses). Usado internamente.',
-      type: 'string',
-      validation: (r) =>
-        r.required().regex(/^[a-z0-9-]+$/, {
-          name: 'lower-kebab',
-          invert: false,
-        }),
-    }),
     defineField({
       name: 'title',
       title: 'Nome da série',
@@ -35,24 +25,12 @@ export const series = defineType({
       description: 'Texto descritivo da série, partilhado por todas as obras. Pode ser substituído obra a obra se necessário.',
       type: 'localizedText',
     }),
-    defineField({
-      name: 'displayOrder',
-      title: 'Ordem de exibição',
-      type: 'number',
-      initialValue: 0,
-    }),
-  ],
-  orderings: [
-    {
-      title: 'Ordem de exibição',
-      name: 'displayOrder',
-      by: [{ field: 'displayOrder', direction: 'asc' }],
-    },
+    orderRankField({ type: 'series' }),
   ],
   preview: {
-    select: { title: 'title', key: 'key' },
-    prepare({ title, key }) {
-      return { title: title || key || 'Série sem nome', subtitle: key };
+    select: { title: 'title' },
+    prepare({ title }) {
+      return { title: title || 'Série sem nome' };
     },
   },
 });
