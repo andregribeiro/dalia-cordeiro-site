@@ -119,33 +119,40 @@ def arrow(d, x1, y1, x2, y2, label=None, label_offset=(0, 6)):
 
 
 def diagram_main_flow():
-    """Artist edits → Site updates flow."""
-    W, H = 480, 320
+    """Artist edits → Site updates flow. Pure vertical spine; GitHub feeds in from the side."""
+    W, H = 480, 380
     d = Drawing(W, H)
 
-    # Top: artist
-    box(d, 175, 270, 130, 36, 'A ARTISTA', 'Dália Cordeiro', bg=PAPER, border=ACCENT, font_size=10)
-    arrow(d, 240, 270, 240, 232, label='abre / faz login')
+    centre_x = 130
+    box_w = 200
 
-    # Sanity Studio
-    box(d, 130, 190, 220, 40, 'SANITY STUDIO', 'daliacordeiro.sanity.studio  —  edita aqui')
-    arrow(d, 240, 190, 240, 152, label='clica  Publish')
+    # 1. Site publicado (bottom)
+    box(d, centre_x, 0, box_w, 40, 'SITE PUBLICADO',
+        'daliacordeiroart.com   ·   visitantes',
+        bg=PAPER, border=ACCENT, font_size=10)
 
-    # Sanity datacenter (storage)
-    box(d, 50, 110, 180, 38, 'SANITY (data)', 'guarda o conteúdo')
-    # Cloudflare Pages
-    box(d, 270, 110, 180, 38, 'CLOUDFLARE PAGES', 'constrói e serve o site')
+    # 2. Cloudflare Pages + GitHub feeding from the right
+    box(d, centre_x, 80, box_w, 40, 'CLOUDFLARE PAGES', 'constrói e serve o site')
+    box(d, centre_x + box_w + 30, 82, 110, 36, 'GITHUB', 'código-fonte', font_size=9)
+    arrow(d, centre_x + box_w + 30, 100, centre_x + box_w, 100, label='lê código',
+          label_offset=(0, 7))
+    arrow(d, centre_x + box_w / 2, 80, centre_x + box_w / 2, 40, label='HTML pronto')
 
-    # Sanity → CF Pages webhook
-    arrow(d, 230, 129, 270, 129, label='webhook')
+    # 3. Sanity (data)
+    box(d, centre_x, 160, box_w, 38, 'SANITY (data)', 'guarda o conteúdo')
+    arrow(d, centre_x + box_w / 2, 160, centre_x + box_w / 2, 120, label='webhook')
 
-    # GitHub
-    box(d, 270, 50, 180, 36, 'GITHUB', 'código-fonte (template visual)')
-    arrow(d, 360, 86, 360, 110, label='lê código', label_offset=(20, 0))
+    # 4. Sanity Studio
+    box(d, centre_x, 240, box_w, 40, 'SANITY STUDIO',
+        'daliacordeiro.sanity.studio  —  edita aqui')
+    arrow(d, centre_x + box_w / 2, 240, centre_x + box_w / 2, 198,
+          label='clica  Publish')
 
-    # Site publicado
-    box(d, 130, 0, 220, 36, 'SITE PUBLICADO', 'daliacordeiroart.com   ·   visitantes', bg=PAPER, border=ACCENT, font_size=10)
-    arrow(d, 320, 110, 270, 36, label='HTML pronto', label_offset=(0, 8))
+    # 5. Artist (top)
+    box(d, centre_x, 320, box_w, 36, 'A ARTISTA', 'Dália Cordeiro',
+        bg=PAPER, border=ACCENT, font_size=10)
+    arrow(d, centre_x + box_w / 2, 320, centre_x + box_w / 2, 280,
+          label='abre / faz login')
 
     return d
 
@@ -237,8 +244,7 @@ def build():
     story.append(Paragraph('MANUAL DO SITE', S['cover_eyebrow']))
     story.append(Spacer(1, 14))
     story.append(Paragraph('Dália Cordeiro <font color="#b84e3a"><i>Art</i></font>', S['cover_title']))
-    story.append(Spacer(1, 6))
-    story.append(Paragraph('Guia para a artista — o que existe, como editar, quanto custa.', S['cover_sub']))
+    story.append(Spacer(1, 18))
     story.append(hr_accent(40))
     story.append(Spacer(1, 14))
     story.append(Paragraph(
@@ -248,12 +254,6 @@ def build():
         'Painel de edição:&nbsp;&nbsp;<font color="#1f1b16"><b>daliacordeiro.sanity.studio</b></font><br/>'
         'Email pessoal (login):&nbsp;&nbsp;<font color="#1f1b16"><b>daliacordeiro.studio@outlook.com</b></font>',
         S['cover_meta']))
-    story.append(Spacer(1, 30))
-    story.append(Paragraph(
-        '<i>&ldquo;Cada figura é um país com o seu próprio tempo, as suas fronteiras, '
-        'as suas pequenas revoluções.&rdquo;</i>',
-        S['cover_meta']))
-    story.append(Paragraph('— frase de abertura do site', S['cover_meta']))
 
     # Force every page after the cover to use the body template.
     story.append(NextPageTemplate('body'))
@@ -264,11 +264,11 @@ def build():
     toc_items = [
         ('1.  Visão geral',                                'pág. 3'),
         ('2.  Arquitetura — como o site funciona',         'pág. 4'),
-        ('3.  Como editar o site (autonomia total)',       'pág. 6'),
-        ('4.  Boas práticas de SEO já aplicadas',          'pág. 10'),
-        ('5.  Custos do projeto',                          'pág. 11'),
-        ('6.  Direitos de autor e proteção contra IA',     'pág. 12'),
-        ('7.  Manutenção, backups e contactos',            'pág. 14'),
+        ('3.  Como editar o site',                         'pág. 6'),
+        ('4.  Boas práticas de SEO já aplicadas',          'pág. 9'),
+        ('5.  Custos do projeto',                          'pág. 10'),
+        ('6.  Direitos de autor e proteção contra IA',     'pág. 11'),
+        ('7.  Manutenção e backups',                       'pág. 12'),
     ]
     toc_data = [[Paragraph(t, S['body_l']), Paragraph(p_, S['small'])] for (t, p_) in toc_items]
     toc = Table(toc_data, colWidths=[140 * mm, 25 * mm])
@@ -321,12 +321,6 @@ def build():
         ('LINEBELOW', (0, 0), (-1, -2), 0.4, PAPER),
     ]))
     story.append(addr_table)
-
-    story.append(Spacer(1, 12))
-    story.append(callout(
-        '<b>Em uma frase:</b> a artista edita no painel <i>Sanity Studio</i>, clica «Publish», '
-        'e em 1–2 minutos o site público é reconstruído automaticamente. Não há ficheiros, '
-        'não há terminais, não há servidores para gerir.'))
 
     story.append(PageBreak())
 
@@ -401,60 +395,85 @@ def build():
     story.append(PageBreak())
 
     # ───── 3. COMO EDITAR ─────
-    story.append(h1('3.  Como editar o site — <font face="Times-Italic" color="#b84e3a">autonomia total</font>'))
+    story.append(h1('3.  Como editar <font face="Times-Italic" color="#b84e3a">o site</font>'))
     story.append(Paragraph(
         'Tudo o que se segue acontece em <b>daliacordeiro.sanity.studio</b>. '
         'Abrir o link no browser, fazer login com a conta Outlook (mesma de sempre), '
         'e fica-se no painel de edição. À esquerda há uma lista com todas as zonas editáveis.',
         S['body']))
-
-    story.append(h2('3.1  Adicionar uma obra'))
     story.append(Paragraph(
-        '<b>Obras</b> → botão <b>+ Create</b> no canto superior direito. '
-        'Para cada obra preenche-se: ',
+        'O painel está organizado em torno das <b>séries</b>: as obras vivem sempre dentro de uma '
+        'série, e por isso a forma natural de trabalhar é entrar primeiro na série e depois '
+        'gerir as obras lá dentro. Para reordenar séries há um item dedicado «<b>Reordenar séries</b>».',
+        S['body']))
+
+    story.append(h2('3.1  Criar uma série nova'))
+    story.append(Paragraph(
+        '<b>Séries</b> (no menu lateral) → botão <b>+ Create</b> no canto superior direito. '
+        'Cada série tem:',
         S['body_l']))
     story.append(Paragraph(
-        '<b>Código (referência):</b> identificador curto e único que serve para os clientes '
-        'citarem a obra em emails (ex: <font face="Courier">M-001</font>, <font face="Courier">B-003</font>). '
+        '<b>Nome da série:</b> nome único da série, igual em português e inglês '
+        '(ex: <i>Metamorphoses</i>, <i>Bestiary</i>). É o que aparece como filtro na galeria e '
+        'como rótulo em cada obra.<br/><br/>'
+        '<b>Técnica padrão:</b> técnica usada por defeito por todas as obras desta série '
+        '(ex: «Óleo sobre tela»). Preenche-se aqui uma vez em PT e EN e poupa repetir em '
+        'cada obra. Pode ser substituída obra a obra se necessário.<br/><br/>'
+        '<b>Descrição da série:</b> texto descritivo, partilhado por todas as obras da série. '
+        'Tem separadores PT / EN. Pode ser substituído obra a obra se necessário.',
+        S['body_l']))
+    story.append(Paragraph(
+        'Não há campos técnicos (ordens, chaves, slugs) — a ordem é controlada por '
+        'arrastar (ver 3.3) e o resto está escondido.',
+        S['body']))
+
+    story.append(h2('3.2  Adicionar / editar obras dentro de uma série'))
+    story.append(Paragraph(
+        '<b>Séries</b> → clicar na série desejada → aparecem duas opções:',
+        S['body_l']))
+    story.append(Paragraph(
+        '<b>«Editar esta série»</b> abre o documento da própria série (nome, técnica e descrição padrão).<br/><br/>'
+        '<b>«Obras desta série»</b> mostra a lista de obras já criadas. Para adicionar uma obra '
+        'nova, clicar <b>+ Create</b> aí dentro — o campo <i>Série</i> da nova obra já fica '
+        'preenchido automaticamente. Para editar uma obra existente, clicar nela.',
+        S['body_l']))
+    story.append(Paragraph(
+        'Para cada obra preenche-se:',
+        S['body_l']))
+    story.append(Paragraph(
+        '<b>Código (referência):</b> identificador curto e único que aparece nos pedidos de '
+        'contacto (ex: <font face="Courier">M-001</font>, <font face="Courier">B-003</font>). '
         'A convenção atual é a primeira letra da série mais um número de três dígitos.<br/><br/>'
-        '<b>Série:</b> escolher a série a que a obra pertence (Metamorphoses, Bestiary, etc.). '
-        'A técnica e descrição vêm automaticamente da série, a não ser que se queira que esta '
-        'obra seja diferente.<br/><br/>'
         '<b>Imagem principal:</b> arrastar o ficheiro para a caixa, ou clicar para escolher. '
         'É possível arrastar o ponto verde para escolher o ponto focal (importante quando '
-        'a imagem é cortada para versões pequenas).<br/><br/>'
+        'a imagem é cortada para versões pequenas). O campo <i>Texto alternativo</i> (PT/EN) '
+        'descreve brevemente o que se vê — bom para SEO e acessibilidade.<br/><br/>'
         '<b>Imagens adicionais:</b> opcional, para mostrar detalhes ou várias vistas.<br/><br/>'
         '<b>Ano:</b> ano em que a obra foi feita.<br/><br/>'
         '<b>Dimensões:</b> em centímetros e em polegadas (ex: <font face="Courier">150 × 120 cm</font>).<br/><br/>'
-        '<b>Técnica (substitui a série):</b> deixar vazio na maioria dos casos. Só preencher '
-        'se esta obra usa uma técnica diferente do resto da série.<br/><br/>'
-        '<b>Descrição (substitui a série):</b> idem — só se a obra precisar de uma descrição própria.<br/><br/>'
         '<b>Estado:</b> Disponível, Vendida, Reservada, Não à venda. O ponto colorido '
         'no site muda conforme.<br/><br/>'
-        '<b>Ordem de exibição:</b> número que controla a ordem em que as obras aparecem na '
-        'galeria. Pode-se reordenar arrastando ou trocando este número (mais baixo = aparece primeiro).',
+        '<b>Substituir informação herdada da série</b> (secção colapsável, escondida por defeito): '
+        'só abrir se esta obra precisa de uma <i>técnica</i> ou <i>descrição</i> diferentes da '
+        'série. Caso contrário, deixar fechada — a obra herda o que está definido na série.',
         S['body_l']))
+    story.append(Paragraph(
+        'A ordem das obras na galeria é automática: aparecem por ano (mais recente primeiro).',
+        S['body']))
 
     story.append(callout(
         '<b>Importante:</b> nada é publicado até clicar <b>Publish</b> (canto inferior direito). '
         'Antes de Publish, fica em rascunho — pode-se sair, voltar mais tarde e continuar.'))
 
-    story.append(h2('3.2  Criar / editar uma série'))
+    story.append(h2('3.3  Reordenar séries'))
     story.append(Paragraph(
-        '<b>Série</b> → escolher uma das existentes ou clicar <b>+ Create</b>. Cada série tem:',
-        S['body_l']))
-    story.append(Paragraph(
-        '<b>Chave:</b> identificador curto, sem espaços nem acentos (ex: <font face="Courier">metamorphoses</font>). '
-        'Não muda depois de criada.<br/><br/>'
-        '<b>Nome da série:</b> nome bonito (PT e EN). É o que aparece no site.<br/><br/>'
-        '<b>Técnica padrão:</b> usada por defeito por todas as obras desta série. Preenche-se '
-        'aqui uma vez e poupa repetir em cada obra.<br/><br/>'
-        '<b>Descrição da série:</b> texto que descreve a série como um todo. Pode-se sempre '
-        'escrever uma descrição diferente numa obra específica se for preciso.<br/><br/>'
-        '<b>Ordem de exibição:</b> controla a ordem dos filtros de série na galeria.',
-        S['body_l']))
+        'No menu lateral há um item <b>Reordenar séries</b>. Abrindo-o aparece a lista de '
+        'séries com um símbolo de arrastar à esquerda de cada uma. Arrastar a série para cima '
+        'ou para baixo altera a ordem em que aparecem como filtros na galeria pública. '
+        'A nova ordem fica guardada automaticamente — não é preciso Publish para isto.',
+        S['body']))
 
-    story.append(h2('3.3  Editar a página &ldquo;Sobre&rdquo;'))
+    story.append(h2('3.4  Editar a página &ldquo;Sobre&rdquo;'))
     story.append(Paragraph(
         '<b>Sobre</b> (na lista lateral) → tem um único documento que controla toda a página.',
         S['body_l']))
@@ -469,27 +488,31 @@ def build():
         'envolvida. Para cada entrada: ano, título, descrição opcional e link opcional.',
         S['body_l']))
 
-    story.append(h2('3.4  Definições do Site'))
+    story.append(h2('3.5  Definições do Site'))
     story.append(Paragraph(
-        '<b>Definições do Site</b> (na lista lateral) → controla o cabeçalho, rodapé, hero e contactos.',
+        '<b>Definições do Site</b> (na lista lateral) → controla o cabeçalho, rodapé, hero e '
+        'contactos. Os campos estão organizados em quatro <b>separadores</b> no topo do documento: '
+        '<i>Página inicial</i>, <i>Contacto e redes</i>, <i>Eventos</i> e <i>Geral</i>.',
         S['body_l']))
     story.append(Paragraph(
-        '<b>Frase principal (hero):</b> a frase grande na homepage. Pode usar <i>itálico em coral</i> '
-        'envolvendo palavras com <font face="Courier">&lt;em&gt;palavra&lt;/em&gt;</font>.<br/><br/>'
-        '<b>Parágrafo de introdução (hero):</b> texto curto sob a frase principal.<br/><br/>'
-        '<b>Obra destacada (hero):</b> a obra que aparece em grande na homepage.<br/><br/>'
-        '<b>Email de contacto:</b> aparece na página de contacto.<br/><br/>'
-        '<b>Instagram URL:</b> usado nos ícones do header e rodapé.<br/><br/>'
-        '<b>Imagem SEO padrão:</b> imagem que aparece quando alguém partilha o site no '
-        'WhatsApp, Slack, redes sociais. Se vazia, usa a obra em destaque automaticamente.<br/><br/>'
-        '<b>Texto do rodapé:</b> a frase final do rodapé. Por defeito é o copyright.',
+        '<b>Página inicial</b> — <i>Frase principal (hero):</i> a frase grande na homepage. '
+        'Pode usar <i>itálico em coral</i> envolvendo palavras com '
+        '<font face="Courier">&lt;em&gt;palavra&lt;/em&gt;</font>. '
+        '<i>Parágrafo de introdução (hero):</i> texto curto sob a frase principal. '
+        '<i>Obra destacada (hero):</i> a obra que aparece em grande na homepage.<br/><br/>'
+        '<b>Contacto e redes</b> — <i>Email de contacto:</i> aparece na página de contacto. '
+        '<i>Instagram URL:</i> usado nos ícones do header e rodapé.<br/><br/>'
+        '<b>Eventos</b> — dois blocos colapsáveis para anunciar exposições (ver 3.6).<br/><br/>'
+        '<b>Geral</b> — <i>Nome do site, Texto do rodapé</i> (frase final, por defeito o '
+        'copyright) e <i>Imagem SEO padrão</i> (aparece quando o site é partilhado em redes '
+        'sociais; se vazia, usa a obra em destaque automaticamente).',
         S['body_l']))
 
-    story.append(h2('3.5  Anunciar exposições e eventos'))
+    story.append(h2('3.6  Anunciar exposições e eventos'))
     story.append(Paragraph(
-        'Em <b>Definições do Site</b> há dois blocos colapsáveis: <b>Próximo evento</b> e '
-        '<b>Evento passado recente</b>. Quando preenchidos, aparece uma faixa fina e discreta '
-        'no topo do site avisando os visitantes.',
+        'Em <b>Definições do Site</b> → separador <b>Eventos</b> há dois blocos colapsáveis: '
+        '<b>Próximo evento</b> e <b>Evento passado recente</b>. Quando preenchidos, aparece '
+        'uma faixa fina e discreta no topo do site avisando os visitantes.',
         S['body_l']))
     story.append(Paragraph(
         'Cada bloco tem: <b>Título</b> (PT/EN), <b>Data</b>, <b>Local</b> (PT/EN) e <b>Link</b> opcional. '
@@ -502,7 +525,7 @@ def build():
         'pode-se mover essa informação para o bloco «Evento passado recente». O site '
         'continua a mostrar a referência durante semanas, dando peso à participação.'))
 
-    story.append(h2('3.6  Bibliografia (página &ldquo;Sobre&rdquo;)'))
+    story.append(h2('3.7  Bibliografia (página &ldquo;Sobre&rdquo;)'))
     story.append(Paragraph(
         'Em <b>Sobre</b> → secção <b>Bibliografia</b> → <b>+ Add item</b>. Para cada entrada:<br/>'
         '<b>Ano</b> (pode ser um período, ex: <font face="Courier">2020–2023</font>), '
@@ -513,7 +536,7 @@ def build():
         'para reorganizar. Sugestão: ordenar por ano descendente (mais recente em cima).',
         S['body']))
 
-    story.append(h2('3.7  Publicar — o que acontece quando se clica «Publish»'))
+    story.append(h2('3.8  Publicar — o que acontece quando se clica «Publish»'))
     story.append(Paragraph(
         '<b>1.</b> O conteúdo passa de rascunho para publicado. '
         '<b>2.</b> O Sanity dispara um sinal para a Cloudflare. '
@@ -705,11 +728,6 @@ def build():
          'Adiciona uma perturbação invisível ao olho humano à imagem antes de a carregar para o site. '
          'Modelos que tentem treinar nela aprendem uma representação distorcida. ~10 min por imagem '
          'em CPU. Não compromete a visualização.'),
-        ('Cloudflare Bot Blocker (assim que o domínio estiver ativo)',
-         'No painel da Cloudflare, na secção «Security → Bots», ativar a opção de bloquear bots '
-         'de treino de IA. Funciona à entrada do tráfego — bots bloqueados nem chegam ao site. '
-         'Esta secção só fica disponível depois do domínio  daliacordeiroart.com  estar ligado '
-         'à conta Cloudflare como Zone (passo a fazer no momento do registo do domínio).'),
         ('Marca de água (opcional, decisão estética)',
          'Adicionar uma marca discreta nas imagens (ex: «©  Dália Cordeiro» pequena num canto). '
          'Reduz o valor da imagem para treino e dificulta uso comercial não autorizado, mas '
@@ -730,7 +748,7 @@ def build():
     story.append(PageBreak())
 
     # ───── 7. MANUTENÇÃO ─────
-    story.append(h1('7.  Manutenção, backups e <font face="Times-Italic" color="#b84e3a">contactos</font>'))
+    story.append(h1('7.  Manutenção e <font face="Times-Italic" color="#b84e3a">backups</font>'))
 
     story.append(h2('Backups'))
     story.append(Paragraph(
@@ -769,7 +787,8 @@ def build():
         ('O formulário de contacto não me chega ao email',
          'Verificar a pasta de spam. Verificar no painel do Web3Forms se a mensagem foi '
          'recebida. Se sim mas não chegou ao Outlook, é problema de filtros do email.'),
-        ('Quero adicionar uma nova série / mudar o design',
+        ('Quero mudar algo no design do site, ou adicionar novas funcionalidades '
+         '(ex: preços nas obras, outras configurações)',
          'Contactar o programador.'),
     ]
     trouble_data = [[Paragraph('· ' + name, S['tbl_cell_b']), Paragraph(desc, S['tbl_cell'])] for name, desc in troubles]
@@ -783,16 +802,6 @@ def build():
         ('LINEBELOW', (0, 0), (-1, -2), 0.3, LINE),
     ]))
     story.append(trouble_table)
-
-    story.append(Spacer(1, 24))
-    story.append(hr_accent(40))
-    story.append(Spacer(1, 8))
-    story.append(Paragraph(
-        '<b>Bom uso.</b><br/>'
-        'O site foi pensado para ser autónomo e duradouro — todas as decisões '
-        'foram tomadas para a artista poder editar, publicar e crescer sem depender de '
-        'ninguém para cada pequena alteração.',
-        S['lead']))
 
     doc.build(story)
     print(f'✓ PDF gerado em: {out_path}')
