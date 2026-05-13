@@ -25,6 +25,7 @@ const ui = {
     inquire: 'Pedir informação sobre esta obra',
     close: 'Fechar',
     inquiry_for: 'Pedido para',
+    load_more: 'Mostrar mais',
   },
   en: {
     filter_series: 'Series',
@@ -48,6 +49,7 @@ const ui = {
     inquire: 'Inquire about this work',
     close: 'Close',
     inquiry_for: 'Inquiry for',
+    load_more: 'Show more',
   },
 } as const;
 
@@ -68,11 +70,18 @@ interface Props {
   contactUrl: string;
 }
 
+const PAGE_SIZE = 24;
+
 export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, contactUrl }: Props) {
   const [seriesId, setSeriesId] = useState('all');
   const [status, setStatus] = useState('all');
   const [type, setType] = useState<'all' | 'series' | 'standalone'>('all');
   const [openWork, setOpenWork] = useState<Artwork | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [seriesId, status, type]);
 
   const allSeries = useMemo(() => {
     const seen = new Map<string, { id: string; label: string }>();
@@ -93,6 +102,9 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
     if (status !== 'all' && w.status !== status) return false;
     return true;
   });
+
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
 
   return (
     <>
@@ -165,7 +177,7 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
 
         {/* Grid */}
         <div className="grid">
-          {filtered.map((w) => {
+          {visible.map((w) => {
             const cardTitle = w.title || w.series?.title || t(lang, 'standalone_one');
             return (
             <button key={w._id} className="card" onClick={() => setOpenWork(w)}>
@@ -195,6 +207,21 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
             );
           })}
         </div>
+
+        {hasMore && (
+          <div className="load-more-wrap">
+            <button
+              type="button"
+              className="load-more"
+              onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+            >
+              {t(lang, 'load_more')}
+              <span className="load-more-count">
+                {String(visible.length).padStart(2, '0')} / {String(filtered.length).padStart(2, '0')}
+              </span>
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Modal */}

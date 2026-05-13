@@ -383,6 +383,37 @@ a.evt:hover .evt-title { color: var(--accent); }
   grid-template-columns: repeat(3, 1fr);
   gap: 32px 32px;
 }
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+.load-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 12px 24px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all .15s;
+}
+.load-more:hover { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.load-more:hover .load-more-count { color: var(--paper); opacity: .7; }
+.load-more-count {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+}
 .card {
   cursor: pointer;
   background: none;

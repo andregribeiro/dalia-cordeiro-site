@@ -12,9 +12,7 @@ export const ui = {
   pt: {
     nav_works: 'Obras',
     nav_about: 'Sobre',
-    nav_contact: 'Contacto',
-    intro:
-      'Um corpo de trabalho em óleo, pastel e técnica mista. Figuras, santas e bestas mansas que não param de se rearranjar.',
+    nav_contact: 'Contactos',
     view_works: 'Ver o conjunto de obras',
     all: 'Tudo',
     filter_series: 'Série',
@@ -31,7 +29,7 @@ export const ui = {
     inquire: 'Pedir informação sobre esta obra',
     close: 'Fechar',
     about_title: 'Sobre',
-    contact_title: 'Contacto',
+    contact_title: 'Contactos',
     contact_sub: 'Para disponibilidade, preços, visitas ao atelier e encomendas.',
     name: 'O seu nome',
     email: 'O seu email',
@@ -45,9 +43,7 @@ export const ui = {
   en: {
     nav_works: 'Works',
     nav_about: 'About',
-    nav_contact: 'Contact',
-    intro:
-      'A body of work in oil, pastel and mixed media. Figures, saints and soft beasts that keep rearranging themselves.',
+    nav_contact: 'Contacts',
     view_works: 'View the body of work',
     all: 'All',
     filter_series: 'Series',
@@ -64,7 +60,7 @@ export const ui = {
     inquire: 'Inquire about this work',
     close: 'Close',
     about_title: 'About',
-    contact_title: 'Inquire',
+    contact_title: 'Contacts',
     contact_sub: 'For availability, prices, studio visits and commissions.',
     name: 'Your name',
     email: 'Your email',

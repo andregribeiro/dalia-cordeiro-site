@@ -15,12 +15,7 @@ interface Props {
 const { lang, headline, intro, featured } = Astro.props;
 
 const heroText = loc(headline, lang);
-const introText = loc(intro, lang) || t(lang, 'intro');
-
-// Split headline for the <em> styling: wrap the second word in <em>
-// Original: "Bodies that refuse to stay put." / "Corpos que se recusam a ficar quietos."
-// We'll render the full text and let the page handle emphasis via markup in the CMS field.
-// For now, render as-is.
+const introText = loc(intro, lang);
 
 const featuredImgUrl = featured
   ? urlFor(featured.image).width(1400).auto('format').url()
@@ -31,7 +26,7 @@ const featuredImgUrl = featured
   <div class="hero-grid">
     <div>
       <h1 set:html={heroText} />
-      <p class="intro">{introText}</p>
+      {introText && <p class="intro">{introText}</p>}
       <a class="hero-cta" href="#works">
         {t(lang, 'view_works')}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
