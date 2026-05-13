@@ -61,6 +61,18 @@ export default defineConfig({
                       ]),
                   ),
               ),
+            S.listItem()
+              .title('Obras individuais')
+              .id('standalone-artworks')
+              .child(
+                S.documentTypeList('artwork')
+                  .title('Obras individuais (sem série)')
+                  .filter('_type == "artwork" && !defined(series)')
+                  .defaultOrdering([{ field: 'year', direction: 'desc' }])
+                  .initialValueTemplates([
+                    S.initialValueTemplateItem('artwork-standalone'),
+                  ]),
+              ),
             S.divider(),
             orderableDocumentListDeskItem({
               type: 'series',
@@ -95,6 +107,12 @@ export default defineConfig({
         value: ({ seriesId }: { seriesId: string }) => ({
           series: { _type: 'reference', _ref: seriesId },
         }),
+      },
+      {
+        id: 'artwork-standalone',
+        title: 'Obra individual (sem série)',
+        schemaType: 'artwork',
+        value: {},
       },
     ],
   },

@@ -4,14 +4,6 @@ export const artwork = defineType({
   name: 'artwork',
   title: 'Obra',
   type: 'document',
-  fieldsets: [
-    {
-      name: 'overrides',
-      title: 'Substituir informação herdada da série (opcional)',
-      description: 'Só preencher se esta obra precisa de técnica ou descrição diferentes da série.',
-      options: { collapsible: true, collapsed: true },
-    },
-  ],
   fields: [
     defineField({
       name: 'code',
@@ -23,10 +15,9 @@ export const artwork = defineType({
     defineField({
       name: 'series',
       title: 'Série',
-      description: 'A série a que esta obra pertence. Pré-preenchida quando a obra é criada dentro de uma série.',
+      description: 'Opcional. Deixar vazio para obras individuais (sem série). Pré-preenchida quando a obra é criada dentro de uma série.',
       type: 'reference',
       to: [{ type: 'series' }],
-      validation: (r) => r.required(),
     }),
     defineField({
       name: 'image',
@@ -94,15 +85,15 @@ export const artwork = defineType({
     }),
     defineField({
       name: 'mediumOverride',
-      title: 'Técnica (substitui a série)',
+      title: 'Técnica',
+      description: 'Para obras individuais, é a técnica desta obra. Quando dentro de uma série, substitui a técnica padrão da série (deixar vazio para herdar).',
       type: 'localizedString',
-      fieldset: 'overrides',
     }),
     defineField({
       name: 'descriptionOverride',
-      title: 'Descrição (substitui a série)',
+      title: 'Descrição',
+      description: 'Para obras individuais, é a descrição desta obra. Quando dentro de uma série, substitui a descrição da série (deixar vazio para herdar).',
       type: 'localizedText',
-      fieldset: 'overrides',
     }),
   ],
   orderings: [

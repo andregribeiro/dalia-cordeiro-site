@@ -5,7 +5,7 @@ export const allSeriesQuery = `
 `;
 
 export const allArtworksQuery = `
-  *[_type == "artwork"] | order(series->orderRank asc, year desc, _createdAt desc) {
+  *[_type == "artwork"] | order(coalesce(series->orderRank, 999999) asc, year desc, _createdAt desc) {
     _id, code, image, additionalImages,
     year, dimensions, status,
     "medium": coalesce(mediumOverride, series->medium),

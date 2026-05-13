@@ -7,6 +7,8 @@ const ui = {
     filter_series: 'Série',
     filter_status: 'Estado',
     all: 'Tudo',
+    standalone: 'Obras individuais',
+    standalone_one: 'Obra individual',
     status_available: 'Disponível',
     status_sold: 'Vendida',
     status_reserved: 'Reservada',
@@ -25,6 +27,8 @@ const ui = {
     filter_series: 'Series',
     filter_status: 'Status',
     all: 'All',
+    standalone: 'Standalone works',
+    standalone_one: 'Standalone work',
     status_available: 'Available',
     status_sold: 'Sold',
     status_reserved: 'Reserved',
@@ -73,9 +77,12 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
     return Array.from(seen.values());
   }, [artworks]);
 
+  const hasStandalone = useMemo(() => artworks.some((w) => !w.series?._id), [artworks]);
+
   const filtered = artworks.filter(
     (w) =>
-      (seriesId === 'all' || w.series?._id === seriesId) &&
+      (seriesId === 'all' ||
+        (seriesId === 'standalone' ? !w.series?._id : w.series?._id === seriesId)) &&
       (status === 'all' || w.status === status),
   );
 
@@ -108,6 +115,14 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
                 {s.label}
               </button>
             ))}
+            {hasStandalone && (
+              <button
+                className={`chip${seriesId === 'standalone' ? ' on' : ''}`}
+                onClick={() => setSeriesId('standalone')}
+              >
+                {t(lang, 'standalone')}
+              </button>
+            )}
           </div>
           <div className="filter-group">
             <span className="filter-label">{t(lang, 'filter_status')}</span>
@@ -125,12 +140,14 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
 
         {/* Grid */}
         <div className="grid">
-          {filtered.map((w) => (
+          {filtered.map((w) => {
+            const cardTitle = w.series?.title || t(lang, 'standalone_one');
+            return (
             <button key={w._id} className="card" onClick={() => setOpenWork(w)}>
               <div className="card-img">
                 <img
                   src={imageUrls[w._id]}
-                  alt={loc(w.image?.alt, lang) || `${w.series?.title ?? ''} — ${w.code}`}
+                  alt={loc(w.image?.alt, lang) || `${cardTitle} — ${w.code}`}
                   loading="lazy"
                   decoding="async"
                   width="600"
@@ -142,7 +159,7 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
                 </span>
               </div>
               <div className="card-meta">
-                <span className="card-title">{w.series?.title ?? ''}</span>
+                <span className="card-title">{cardTitle}</span>
                 <span className="card-year">{w.year}</span>
               </div>
               <div className="card-medium">
@@ -150,7 +167,8 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
                 {loc(w.medium, lang) && <> · {loc(w.medium, lang)}</>}
               </div>
             </button>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -224,6 +242,7 @@ function Modal({ work, works, lang, imageUrls, onClose, onNavigate, contactUrl }
   }, [work, works, onClose]);
 
   const seriesTitle = work.series?.title ?? '';
+  const modalTitle = work.series?.title || t(lang, 'standalone_one');
   const inquireUrl = `${contactUrl}?code=${encodeURIComponent(work.code)}&series=${encodeURIComponent(seriesTitle)}&year=${work.year}`;
   const navLabels = lang === 'pt'
     ? { prev: 'Obra anterior', next: 'Obra seguinte' }
@@ -238,7 +257,7 @@ function Modal({ work, works, lang, imageUrls, onClose, onNavigate, contactUrl }
           </svg>
         </button>
         <div className="modal-image" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-          <img src={imageUrls[work._id]} alt={loc(work.image?.alt, lang) || `${seriesTitle} — ${work.code}`} decoding="async" />
+          <img src={imageUrls[work._id]} alt={loc(work.image?.alt, lang) || `${modalTitle} — ${work.code}`} decoding="async" />
           {hasNav && (
             <>
               <button
@@ -269,7 +288,7 @@ function Modal({ work, works, lang, imageUrls, onClose, onNavigate, contactUrl }
         </div>
         <div className="modal-body">
           <div className="modal-series">{work.code}</div>
-          <h3 className="modal-title">{seriesTitle}</h3>
+          <h3 className="modal-title">{modalTitle}</h3>
           <div className="modal-year">{work.year}</div>
           {loc(work.description, lang) && <p className="modal-desc">{loc(work.description, lang)}</p>}
           <dl className="modal-specs">

@@ -25,7 +25,7 @@ export interface Artwork {
   year: number;
   medium: LocalizedString;
   dimensions: { cm: string; in: string };
-  series: Series;
+  series?: Series;
   status: 'available' | 'sold' | 'reserved' | 'nfs';
   description: LocalizedText;
 }
