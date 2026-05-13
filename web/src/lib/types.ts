@@ -20,6 +20,7 @@ export interface Series {
 export interface Artwork {
   _id: string;
   code: string;
+  title?: string;
   image: SanityImageSource & { alt?: LocalizedString };
   additionalImages?: Array<SanityImageSource & { alt?: LocalizedString }>;
   year: number;

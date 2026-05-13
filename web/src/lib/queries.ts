@@ -6,7 +6,7 @@ export const allSeriesQuery = `
 
 export const allArtworksQuery = `
   *[_type == "artwork"] | order(coalesce(series->orderRank, 999999) asc, year desc, _createdAt desc) {
-    _id, code, image, additionalImages,
+    _id, code, title, image, additionalImages,
     year, dimensions, status,
     "medium": coalesce(mediumOverride, series->medium),
     "description": coalesce(descriptionOverride, series->description),
@@ -23,7 +23,7 @@ export const siteSettingsQuery = `
     defaultSeoImage, footerText,
     upcomingEvent, recentPastEvent,
     heroArtwork-> {
-      _id, code, image, year, dimensions, status,
+      _id, code, title, image, year, dimensions, status,
       "medium": coalesce(mediumOverride, series->medium),
       "description": coalesce(descriptionOverride, series->description),
       series-> { _id, title }

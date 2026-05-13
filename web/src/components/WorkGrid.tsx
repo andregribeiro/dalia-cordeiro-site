@@ -141,7 +141,7 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
         {/* Grid */}
         <div className="grid">
           {filtered.map((w) => {
-            const cardTitle = w.series?.title || t(lang, 'standalone_one');
+            const cardTitle = w.title || w.series?.title || t(lang, 'standalone_one');
             return (
             <button key={w._id} className="card" onClick={() => setOpenWork(w)}>
               <div className="card-img">
@@ -242,7 +242,7 @@ function Modal({ work, works, lang, imageUrls, onClose, onNavigate, contactUrl }
   }, [work, works, onClose]);
 
   const seriesTitle = work.series?.title ?? '';
-  const modalTitle = work.series?.title || t(lang, 'standalone_one');
+  const modalTitle = work.title || work.series?.title || t(lang, 'standalone_one');
   const inquireUrl = `${contactUrl}?code=${encodeURIComponent(work.code)}&series=${encodeURIComponent(seriesTitle)}&year=${work.year}`;
   const navLabels = lang === 'pt'
     ? { prev: 'Obra anterior', next: 'Obra seguinte' }

@@ -20,6 +20,12 @@ export const artwork = defineType({
       to: [{ type: 'series' }],
     }),
     defineField({
+      name: 'title',
+      title: 'Nome da obra',
+      description: 'Opcional. Nome próprio desta obra (sem tradução). Para obras individuais aparece no site como título. Para obras dentro de uma série, se preenchido substitui o nome da série neste cartão; se vazio, usa o nome da série.',
+      type: 'string',
+    }),
+    defineField({
       name: 'image',
       title: 'Imagem principal',
       type: 'image',
@@ -111,14 +117,16 @@ export const artwork = defineType({
   preview: {
     select: {
       code: 'code',
+      title: 'title',
       year: 'year',
       media: 'image',
       status: 'status',
       seriesTitle: 'series.title',
     },
-    prepare({ code, year, media, status, seriesTitle }) {
+    prepare({ code, title, year, media, status, seriesTitle }) {
+      const head = title ? `${code} · ${title}` : (code || 'Sem código');
       return {
-        title: code || 'Sem código',
+        title: head,
         subtitle: `${seriesTitle ?? '—'} · ${year ?? '—'} · ${status ?? ''}`,
         media,
       };
