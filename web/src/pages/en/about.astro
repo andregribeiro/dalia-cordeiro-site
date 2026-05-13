@@ -30,9 +30,10 @@ function blocksToText(blocks: any[] | undefined): string[] {
 }
 
 const bioParas = blocksToText(about?.longBio?.[lang] ?? about?.longBio?.pt);
+const metaDesc = bioParas.join(' ').slice(0, 160).trim();
 ---
 
-<Base lang={lang} title={`${t(lang, 'about_title')} · Dália Cordeiro · Art`} description={loc(about?.shortBio, lang)} ogImage={ogImage} ogType="profile" jsonLd={jsonLd}>
+<Base lang={lang} title={`${t(lang, 'about_title')} · Dália Cordeiro · Art`} description={metaDesc} ogImage={ogImage} ogType="profile" jsonLd={jsonLd}>
   <Header lang={lang} active="about" instagramUrl={settings?.instagramUrl} />
   <EventNotice lang={lang} upcoming={settings?.upcomingEvent} pastRecent={settings?.recentPastEvent} />
 

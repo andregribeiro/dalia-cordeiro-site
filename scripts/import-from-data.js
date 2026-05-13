@@ -233,11 +233,6 @@ async function main() {
       _type: 'image',
       asset: { _type: 'reference', _ref: portraitAssetId },
     },
-    shortBio: {
-      _type: 'localizedText',
-      pt: 'Dália Cordeiro pinta corpos que se recusam a ficar quietos. Trabalhando entre óleo, pastel e técnica mista, constrói superfícies que ficam algures entre um jardim, um bestiário e uma discussão.',
-      en: 'Dália Cordeiro paints bodies that refuse to stay put. Working between oil, pastel and mixed media, she builds surfaces that sit somewhere between a garden, a bestiary and an argument.',
-    },
     longBio: {
       _type: 'localizedRichText',
       pt: [

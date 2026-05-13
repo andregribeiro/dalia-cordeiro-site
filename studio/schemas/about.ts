@@ -12,13 +12,9 @@ export const about = defineType({
       options: { hotspot: true },
     }),
     defineField({
-      name: 'shortBio',
-      title: 'Biografia curta',
-      type: 'localizedText',
-    }),
-    defineField({
       name: 'longBio',
-      title: 'Biografia completa',
+      title: 'Biografia',
+      description: 'Texto que aparece na página Sobre. O início é também usado automaticamente nos resultados do Google e nas partilhas em redes sociais.',
       type: 'localizedRichText',
     }),
     defineField({

@@ -33,7 +33,7 @@ export const siteSettingsQuery = `
 
 export const aboutQuery = `
   *[_id == "about"][0] {
-    portrait, shortBio, longBio,
+    portrait, longBio,
     birthplace, birthYear,
     stats, bibliography
   }

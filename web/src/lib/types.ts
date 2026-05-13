@@ -47,7 +47,6 @@ export interface BibliographyEntry {
 
 export interface About {
   portrait: SanityImageSource;
-  shortBio: LocalizedText;
   longBio: { pt?: any[]; en?: any[] };
   birthplace: string;
   birthYear: number;
