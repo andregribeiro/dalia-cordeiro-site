@@ -79,7 +79,7 @@ dalia-cordeiro-site/
 │       │   ├── Header.astro            # Nav + lang switch
 │       │   ├── Hero.astro              # Homepage hero (CMS-driven)
 │       │   ├── Footer.astro
-│       │   ├── WorkGrid.tsx            # React island: grid + filters + modal
+│       │   ├── WorkGrid.tsx            # React island: grid + filters + modal + Load more (24-batch)
 │       │   └── ContactForm.tsx         # React island: Web3Forms form
 │       ├── layouts/Base.astro          # HTML shell, hreflang, OG, font preload
 │       ├── lib/
@@ -103,6 +103,7 @@ dalia-cordeiro-site/
 │   ├── sanity.cli.ts                   # studioHost: 'daliacordeiro'
 │   └── schemas/
 │       ├── artwork.ts
+│       ├── series.ts                   # Series document (orderRank, drag-to-reorder)
 │       ├── about.ts                    # Singleton
 │       ├── siteSettings.ts             # Singleton
 │       └── objects/localizedString.ts  # localizedString/Text/RichText
@@ -138,7 +139,7 @@ dalia-cordeiro-site/
 - UI strings: static dict in `i18n.ts` → `ui` object. Use `t(lang, key)`.
 - CMS fields: `localizedString` / `localizedText` objects with `{pt, en}` sub-fields.
 - Resolve localized fields with `loc(field, lang)` from `web/src/lib/helpers.ts`. Always falls back to PT.
-- Series names: static dict in `i18n.ts` → `seriesNames`. Series are NOT a Sanity document type — stored as enum string on artwork (English keys: `Metamorphoses`, `Works on Paper`, `Saints & Weeds`, `Portraits`, `Bestiary`).
+- Series are a Sanity document type (`series`) with `orderRank` for drag-to-reorder. Artwork references a series via an **optional** `series` reference field — works without one are "standalone" and surface in a dedicated filter group in `WorkGrid.tsx`.
 - hreflang alternates on every page via `Base.astro`. `x-default` → `/pt/`.
 
 ---
@@ -149,7 +150,7 @@ dalia-cordeiro-site/
 - **Localized fields**: use custom object types `localizedString`, `localizedText`, `localizedRichText` (see `studio/schemas/objects/localizedString.ts`).
 - **`@sanity/language-filter`** plugin shows PT/EN tabs in Studio.
 - **Field labels in Portuguese** (e.g., "Titulo", "Tecnica", "Dimensoes") — the artist edits in PT.
-- `siteSettings` holds `heroHeadline` and `heroArtwork` so the artist can edit hero image + text without code changes.
+- `siteSettings` holds `heroHeadline`, `heroIntro`, and `heroArtwork` so the artist can edit hero image + text without code changes. `heroIntro` has **no hardcoded fallback** — if unset in Studio, the homepage simply omits the intro paragraph.
 
 ---
 
@@ -270,7 +271,7 @@ Reads artwork data and images from `prototype/`, uploads to Sanity, creates all 
 - Do not create artwork detail pages (`/galeria/[slug]`) — modal-only is the agreed product decision.
 - Do not add the Tweaks panel from `prototype/` — it was for prototyping only.
 - Do not load fonts from Google Fonts CDN — they are self-hosted.
-- Do not hardcode hero text/image — those live in `siteSettings` so the artist can edit them.
+- Do not hardcode hero text/intro/image — those live in `siteSettings` so the artist can edit them. Do not reintroduce a hardcoded fallback for `heroIntro`.
 - Do not introduce document-level i18n in Sanity — the project uses field-level `{pt, en}` objects with PT fallback.
 
 ---
