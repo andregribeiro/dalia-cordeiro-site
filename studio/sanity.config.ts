@@ -28,7 +28,7 @@ export default defineConfig({
               .id('series-list')
               .child(
                 S.documentTypeList('series')
-                  .title('Séries (arrastar para reordenar)')
+                  .title('Séries')
                   .child((seriesId) =>
                     S.list()
                       .title('Série')
