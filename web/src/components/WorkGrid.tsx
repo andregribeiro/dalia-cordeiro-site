@@ -6,7 +6,10 @@ const ui = {
   pt: {
     filter_series: 'Série',
     filter_status: 'Estado',
+    filter_type: 'Tipo',
     all: 'Tudo',
+    type_in_series: 'Em série',
+    type_standalone: 'Individuais',
     standalone: 'Obras individuais',
     standalone_one: 'Obra individual',
     status_available: 'Disponível',
@@ -26,7 +29,10 @@ const ui = {
   en: {
     filter_series: 'Series',
     filter_status: 'Status',
+    filter_type: 'Type',
     all: 'All',
+    type_in_series: 'In a series',
+    type_standalone: 'Standalone',
     standalone: 'Standalone works',
     standalone_one: 'Standalone work',
     status_available: 'Available',
@@ -65,6 +71,7 @@ interface Props {
 export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, contactUrl }: Props) {
   const [seriesId, setSeriesId] = useState('all');
   const [status, setStatus] = useState('all');
+  const [type, setType] = useState<'all' | 'series' | 'standalone'>('all');
   const [openWork, setOpenWork] = useState<Artwork | null>(null);
 
   const allSeries = useMemo(() => {
@@ -79,12 +86,13 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
 
   const hasStandalone = useMemo(() => artworks.some((w) => !w.series?._id), [artworks]);
 
-  const filtered = artworks.filter(
-    (w) =>
-      (seriesId === 'all' ||
-        (seriesId === 'standalone' ? !w.series?._id : w.series?._id === seriesId)) &&
-      (status === 'all' || w.status === status),
-  );
+  const filtered = artworks.filter((w) => {
+    if (type === 'series' && !w.series?._id) return false;
+    if (type === 'standalone' && w.series?._id) return false;
+    if (type !== 'standalone' && seriesId !== 'all' && w.series?._id !== seriesId) return false;
+    if (status !== 'all' && w.status !== status) return false;
+    return true;
+  });
 
   return (
     <>
@@ -98,32 +106,49 @@ export default function WorkGrid({ lang, artworks, imageUrls, sectionTitle, cont
 
         {/* Filters */}
         <div className="filters">
-          <div className="filter-group">
-            <span className="filter-label">{t(lang, 'filter_series')}</span>
-            <button
-              className={`chip${seriesId === 'all' ? ' on' : ''}`}
-              onClick={() => setSeriesId('all')}
-            >
-              {t(lang, 'all')}
-            </button>
-            {allSeries.map((s) => (
+          {hasStandalone && (
+            <div className="filter-group">
+              <span className="filter-label">{t(lang, 'filter_type')}</span>
               <button
-                key={s.id}
-                className={`chip${seriesId === s.id ? ' on' : ''}`}
-                onClick={() => setSeriesId(s.id)}
+                className={`chip${type === 'all' ? ' on' : ''}`}
+                onClick={() => setType('all')}
               >
-                {s.label}
+                {t(lang, 'all')}
               </button>
-            ))}
-            {hasStandalone && (
               <button
-                className={`chip${seriesId === 'standalone' ? ' on' : ''}`}
-                onClick={() => setSeriesId('standalone')}
+                className={`chip${type === 'series' ? ' on' : ''}`}
+                onClick={() => setType('series')}
               >
-                {t(lang, 'standalone')}
+                {t(lang, 'type_in_series')}
               </button>
-            )}
-          </div>
+              <button
+                className={`chip${type === 'standalone' ? ' on' : ''}`}
+                onClick={() => setType('standalone')}
+              >
+                {t(lang, 'type_standalone')}
+              </button>
+            </div>
+          )}
+          {type !== 'standalone' && (
+            <div className="filter-group">
+              <span className="filter-label">{t(lang, 'filter_series')}</span>
+              <button
+                className={`chip${seriesId === 'all' ? ' on' : ''}`}
+                onClick={() => setSeriesId('all')}
+              >
+                {t(lang, 'all')}
+              </button>
+              {allSeries.map((s) => (
+                <button
+                  key={s.id}
+                  className={`chip${seriesId === s.id ? ' on' : ''}`}
+                  onClick={() => setSeriesId(s.id)}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          )}
           <div className="filter-group">
             <span className="filter-label">{t(lang, 'filter_status')}</span>
             {(['all', 'available', 'sold', 'reserved', 'nfs'] as const).map((k) => (
