@@ -225,6 +225,26 @@ pnpm build:web
 wrangler pages deploy web/dist --project-name dalia-cordeiro-site
 ```
 
+### Holding page / "go live" toggle
+
+The repo has a second long-lived branch, **`holding-page`**, which contains a minimal Astro site that renders the bilingual "Site em renovação / Site under renovation" placeholder at every previously-live path. Which branch is currently public is controlled by **one setting** in Cloudflare Pages:
+
+> Workers & Pages → `dalia-cordeiro-site` → Settings → Builds & deployments → **Production branch**
+
+- **`holding-page`** = placeholder is live (current state during development).
+- **`main`** = real site is live.
+
+DNS (`www` and apex CNAME → `dalia-cordeiro-site.pages.dev`) and the apex-redirect Rule do not change. While `holding-page` is the production branch, every push to `main` produces a **preview deployment** that nobody sees on the custom domain — useful while iterating, but a trap to remember.
+
+**To put the site live** (when the artist signs off):
+
+1. In Studio, confirm Site Settings has `heroHeadline`, `heroIntro`, and `heroArtwork` filled for both PT and EN. `heroIntro` no longer has a hardcoded fallback — if empty, the homepage renders without the intro paragraph.
+2. Cloudflare → Pages → `dalia-cordeiro-site` → Settings → Builds & deployments → change **Production branch** to `main` → Save.
+3. Deployments tab → find the latest `main` deployment → "..." → **Retry deployment** (promotes it to production). Alternatively push any trivial commit to `main`.
+4. Verify with `curl -sI https://www.daliacordeiroart.com | head -5` — expect a normal `200`, no `cache-control: no-store`, no `x-robots-tag: noindex, nofollow`.
+
+**To put the placeholder back up** (maintenance / emergency): change Production branch back to `holding-page` in the same setting. Do not delete `holding-page` from origin — it's the maintenance switch.
+
 ---
 
 ## Owner / Account Info
@@ -273,6 +293,7 @@ Reads artwork data and images from `prototype/`, uploads to Sanity, creates all 
 - Do not load fonts from Google Fonts CDN — they are self-hosted.
 - Do not hardcode hero text/intro/image — those live in `siteSettings` so the artist can edit them. Do not reintroduce a hardcoded fallback for `heroIntro`.
 - Do not introduce document-level i18n in Sanity — the project uses field-level `{pt, en}` objects with PT fallback.
+- Do not delete the `holding-page` branch from `origin` — it is the production "maintenance mode" switch (see Deploy → Holding page / "go live" toggle).
 
 ---
 
