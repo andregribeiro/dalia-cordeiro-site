@@ -18,7 +18,7 @@ const artworks = await client.fetch<Artwork[]>(allArtworksQuery);
 
 const description = 'Pintora — Porto, Portugal';
 
-const seoSrc = settings?.defaultSeoImage ?? settings?.heroArtwork?.image;
+const seoSrc = settings?.defaultSeoImage ?? settings?.heroImage;
 const ogImage = seoSrc ? urlFor(seoSrc).width(1200).auto('format').url() : undefined;
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const jsonLd = [websiteJsonLd(lang, siteUrl), personJsonLd(lang, siteUrl, ogImage)];
@@ -37,7 +37,7 @@ for (const aw of artworks) {
     lang={lang}
     headline={settings?.heroHeadline}
     intro={settings?.heroIntro}
-    featured={settings?.heroArtwork}
+    featuredImage={settings?.heroImage}
   />
   <WorkGrid
     client:load

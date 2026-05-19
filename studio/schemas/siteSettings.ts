@@ -26,12 +26,20 @@ export const siteSettings = defineType({
       group: 'home',
     }),
     defineField({
-      name: 'heroArtwork',
-      title: 'Obra destacada (hero)',
-      description: 'A obra que aparece em destaque na homepage',
-      type: 'reference',
-      to: [{ type: 'artwork' }],
+      name: 'heroImage',
+      title: 'Imagem em destaque (hero)',
+      description: 'Imagem que aparece em destaque na homepage. Pode ser uma obra, um detalhe do atelier, ou qualquer outra imagem — independente das obras publicadas.',
+      type: 'image',
+      options: { hotspot: true },
       group: 'home',
+      fields: [
+        {
+          name: 'alt',
+          title: 'Texto alternativo',
+          description: 'Descrição curta da imagem para leitores de ecrã e SEO.',
+          type: 'localizedString',
+        },
+      ],
     }),
     defineField({
       name: 'contactEmail',

@@ -17,7 +17,7 @@ const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
 
 const portraitUrl = about?.portrait ? urlFor(about.portrait).width(800).auto('format').url() : '';
 
-const seoSrc = settings?.defaultSeoImage ?? about?.portrait ?? settings?.heroArtwork?.image;
+const seoSrc = settings?.defaultSeoImage ?? about?.portrait ?? settings?.heroImage;
 const ogImage = seoSrc ? urlFor(seoSrc).width(1200).auto('format').url() : undefined;
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const jsonLd = personJsonLd(lang, siteUrl, ogImage);

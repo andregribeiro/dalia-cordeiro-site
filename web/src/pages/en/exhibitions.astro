@@ -13,7 +13,7 @@ const lang = 'en' as const;
 const exhibitions = await client.fetch<Exhibitions>(exhibitionsQuery);
 const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
 
-const seoSrc = settings?.defaultSeoImage ?? settings?.heroArtwork?.image;
+const seoSrc = settings?.defaultSeoImage ?? settings?.heroImage;
 const ogImage = seoSrc ? urlFor(seoSrc).width(1200).auto('format').url() : undefined;
 
 const solo = (exhibitions?.solo ?? []).filter((x) => x && x.trim().length > 0);

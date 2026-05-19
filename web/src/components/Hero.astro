@@ -3,22 +3,23 @@ import type { Lang } from '../lib/i18n';
 import { t } from '../lib/i18n';
 import { loc } from '../lib/helpers';
 import { urlFor } from '../lib/sanity';
-import type { Artwork, LocalizedString, LocalizedText } from '../lib/types';
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import type { LocalizedString, LocalizedText } from '../lib/types';
 
 interface Props {
   lang: Lang;
   headline: LocalizedString;
   intro?: LocalizedText;
-  featured?: Artwork;
+  featuredImage?: SanityImageSource & { alt?: LocalizedString };
 }
 
-const { lang, headline, intro, featured } = Astro.props;
+const { lang, headline, intro, featuredImage } = Astro.props;
 
 const heroText = loc(headline, lang);
 const introText = loc(intro, lang);
 
-const featuredImgUrl = featured
-  ? urlFor(featured.image).width(1400).auto('format').url()
+const featuredImgUrl = featuredImage
+  ? urlFor(featuredImage).width(1400).auto('format').url()
   : '';
 ---
 
@@ -34,11 +35,11 @@ const featuredImgUrl = featured
         </svg>
       </a>
     </div>
-    {featured && (
+    {featuredImage && (
       <div class="hero-featured">
         <img
           src={featuredImgUrl}
-          alt={loc(featured.image?.alt, lang) || ''}
+          alt={loc(featuredImage.alt, lang) || ''}
           width="900"
           height="1200"
         />

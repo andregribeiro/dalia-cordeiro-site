@@ -15,7 +15,7 @@ const lang = 'pt' as const;
 const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
 const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || '';
 
-const seoSrc = settings?.defaultSeoImage ?? settings?.heroArtwork?.image;
+const seoSrc = settings?.defaultSeoImage ?? settings?.heroImage;
 const ogImage = seoSrc ? urlFor(seoSrc).width(1200).auto('format').url() : undefined;
 ---
 

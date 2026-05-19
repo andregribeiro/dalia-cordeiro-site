@@ -70,7 +70,7 @@ export interface SiteSettings {
   siteName: string;
   heroHeadline: LocalizedString;
   heroIntro?: LocalizedText;
-  heroArtwork: Artwork;
+  heroImage?: SanityImageSource & { alt?: LocalizedString };
   contactEmail: string;
   instagramUrl: string;
   defaultSeoImage?: SanityImageSource;

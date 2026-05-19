@@ -192,7 +192,6 @@ async function main() {
 
   // 1. Upload images and create artworks
   console.log('── Artworks ──');
-  const firstArtworkId = `artwork-${ARTWORKS[0].id}`;
 
   for (let i = 0; i < ARTWORKS.length; i++) {
     const aw = ARTWORKS[i];
@@ -290,7 +289,7 @@ async function main() {
       pt: 'Corpos que se recusam a ficar quietos.',
       en: 'Bodies that refuse to stay put.',
     },
-    heroArtwork: { _type: 'reference', _ref: firstArtworkId },
+    // heroImage is set manually in Studio (decoupled from artwork catalog).
     tagline: {
       _type: 'localizedString',
       pt: 'Pintora — Porto, Portugal',

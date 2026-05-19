@@ -18,16 +18,10 @@ export const allArtworksQuery = `
 
 export const siteSettingsQuery = `
   *[_id == "siteSettings"][0] {
-    siteName, heroHeadline, heroIntro,
+    siteName, heroHeadline, heroIntro, heroImage,
     contactEmail, instagramUrl,
     defaultSeoImage, footerText,
-    upcomingEvent, recentPastEvent,
-    heroArtwork-> {
-      _id, code, title, image, year, dimensions, status,
-      "medium": coalesce(mediumOverride, series->medium),
-      "description": coalesce(descriptionOverride, series->description),
-      series-> { _id, title }
-    }
+    upcomingEvent, recentPastEvent
   }
 `;
 
