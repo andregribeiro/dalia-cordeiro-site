@@ -1,0 +1,57 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import EventNotice from '../../components/EventNotice.astro';
+import Footer from '../../components/Footer.astro';
+import { client, urlFor } from '../../lib/sanity';
+import { exhibitionsQuery, siteSettingsQuery } from '../../lib/queries';
+import type { Exhibitions, SiteSettings } from '../../lib/types';
+import { t } from '../../lib/i18n';
+
+const lang = 'en' as const;
+
+const exhibitions = await client.fetch<Exhibitions>(exhibitionsQuery);
+const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
+
+const seoSrc = settings?.defaultSeoImage ?? settings?.heroArtwork?.image;
+const ogImage = seoSrc ? urlFor(seoSrc).width(1200).auto('format').url() : undefined;
+
+const solo = (exhibitions?.solo ?? []).filter((x) => x && x.trim().length > 0);
+const group = (exhibitions?.group ?? []).filter((x) => x && x.trim().length > 0);
+const hasAny = solo.length > 0 || group.length > 0;
+
+const metaDesc = `${t(lang, 'exhibitions_title')} — Dália Cordeiro`;
+---
+
+<Base lang={lang} title={`${t(lang, 'exhibitions_title')} · Dália Cordeiro · Art`} description={metaDesc} ogImage={ogImage}>
+  <Header lang={lang} active="exhibitions" instagramUrl={settings?.instagramUrl} />
+  <EventNotice lang={lang} upcoming={settings?.upcomingEvent} pastRecent={settings?.recentPastEvent} />
+
+  <section class="exhibitions wrap" id="exhibitions">
+    <h2>{t(lang, 'exhibitions_title')}</h2>
+
+    {!hasAny && (
+      <p class="exh-empty">{t(lang, 'exhibitions_empty')}</p>
+    )}
+
+    {solo.length > 0 && (
+      <div class="exh-block">
+        <div class="exh-section-label">{t(lang, 'exhibitions_solo')}</div>
+        <ul class="exh-list">
+          {solo.map((line) => <li>{line}</li>)}
+        </ul>
+      </div>
+    )}
+
+    {group.length > 0 && (
+      <div class="exh-block">
+        <div class="exh-section-label">{t(lang, 'exhibitions_group')}</div>
+        <ul class="exh-list">
+          {group.map((line) => <li>{line}</li>)}
+        </ul>
+      </div>
+    )}
+  </section>
+
+  <Footer lang={lang} footerText={settings?.footerText} instagramUrl={settings?.instagramUrl} />
+</Base>

@@ -4,7 +4,7 @@ import { t, routes, getAlternateLang } from '../lib/i18n';
 
 interface Props {
   lang: Lang;
-  active?: 'works' | 'about' | 'contact';
+  active?: 'works' | 'about' | 'exhibitions' | 'contact';
   instagramUrl?: string;
   /** Override the alternate-language URL (computed from routes by default) */
   altUrl?: string;
@@ -15,11 +15,14 @@ const altLang = getAlternateLang(lang);
 const r = routes[lang];
 const altR = routes[altLang];
 
-// Compute alternate URL: match current page to its route, then map to alt lang
+// Compute alternate URL: match current page to its route, then map to alt lang.
+// Strip trailing slash so '/pt/sobre/' matches the route '/pt/sobre'.
+const stripSlash = (p: string) => (p.length > 1 ? p.replace(/\/$/, '') : p);
 function computeAltUrl(): string {
-  const path = Astro.url.pathname;
-  if (path === r.home) return altR.home;
+  const path = stripSlash(Astro.url.pathname);
+  if (path === stripSlash(r.home)) return altR.home;
   if (path === r.about) return altR.about;
+  if (path === r.exhibitions) return altR.exhibitions;
   if (path === r.contact) return altR.contact;
   if (path === r.terms) return altR.terms;
   return altR.home;
@@ -37,6 +40,7 @@ const menuLabel = lang === 'pt' ? 'Menu' : 'Menu';
     <nav class="nav">
       <a href={r.home} class={active === 'works' ? 'active' : ''}>{t(lang, 'nav_works')}</a>
       <a href={r.about} class={active === 'about' ? 'active' : ''}>{t(lang, 'nav_about')}</a>
+      <a href={r.exhibitions} class={active === 'exhibitions' ? 'active' : ''}>{t(lang, 'nav_exhibitions')}</a>
       <a href={r.contact} class={active === 'contact' ? 'active' : ''}>{t(lang, 'nav_contact')}</a>
     </nav>
     <div class="header-right">
@@ -64,6 +68,7 @@ const menuLabel = lang === 'pt' ? 'Menu' : 'Menu';
   <nav class="drawer-nav">
     <a href={r.home} class={active === 'works' ? 'active' : ''}>{t(lang, 'nav_works')}</a>
     <a href={r.about} class={active === 'about' ? 'active' : ''}>{t(lang, 'nav_about')}</a>
+    <a href={r.exhibitions} class={active === 'exhibitions' ? 'active' : ''}>{t(lang, 'nav_exhibitions')}</a>
     <a href={r.contact} class={active === 'contact' ? 'active' : ''}>{t(lang, 'nav_contact')}</a>
   </nav>
   <div class="drawer-foot">

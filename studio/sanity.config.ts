@@ -4,7 +4,7 @@ import { languageFilter } from '@sanity/language-filter';
 import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list';
 import { schemaTypes } from './schemas';
 
-const singletonTypes = new Set(['about', 'siteSettings']);
+const singletonTypes = new Set(['about', 'exhibitions', 'siteSettings']);
 
 const singletonListItem = (S: any, typeName: string, title: string) =>
   S.listItem()
@@ -83,6 +83,7 @@ export default defineConfig({
             }),
             S.divider(),
             singletonListItem(S, 'about', 'Sobre'),
+            singletonListItem(S, 'exhibitions', 'Exposições'),
             singletonListItem(S, 'siteSettings', 'Definições do Site'),
           ]),
     }),

@@ -4,14 +4,15 @@ export const defaultLang: Lang = 'en';
 export const languages: Lang[] = ['pt', 'en'];
 
 export const routes = {
-  pt: { home: '/pt/', about: '/pt/sobre', contact: '/pt/contacto', terms: '/pt/termos' },
-  en: { home: '/en/', about: '/en/about', contact: '/en/contact', terms: '/en/terms' },
+  pt: { home: '/pt/', about: '/pt/sobre', exhibitions: '/pt/exposicoes', contact: '/pt/contacto', terms: '/pt/termos' },
+  en: { home: '/en/', about: '/en/about', exhibitions: '/en/exhibitions', contact: '/en/contact', terms: '/en/terms' },
 } as const;
 
 export const ui = {
   pt: {
     nav_works: 'Obras',
     nav_about: 'Sobre',
+    nav_exhibitions: 'Exposições',
     nav_contact: 'Contactos',
     view_works: 'Ver o conjunto de obras',
     all: 'Tudo',
@@ -29,6 +30,10 @@ export const ui = {
     inquire: 'Pedir informação sobre esta obra',
     close: 'Fechar',
     about_title: 'Sobre',
+    exhibitions_title: 'Exposições',
+    exhibitions_solo: 'Exposições Individuais',
+    exhibitions_group: 'Exposições Coletivas',
+    exhibitions_empty: 'Sem exposições a apresentar de momento.',
     contact_title: 'Contactos',
     contact_sub: 'Para disponibilidade, preços, visitas ao atelier e encomendas.',
     name: 'O seu nome',
@@ -43,6 +48,7 @@ export const ui = {
   en: {
     nav_works: 'Works',
     nav_about: 'About',
+    nav_exhibitions: 'Exhibitions',
     nav_contact: 'Contacts',
     view_works: 'View the body of work',
     all: 'All',
@@ -60,6 +66,10 @@ export const ui = {
     inquire: 'Inquire about this work',
     close: 'Close',
     about_title: 'About',
+    exhibitions_title: 'Exhibitions',
+    exhibitions_solo: 'Solo Exhibitions',
+    exhibitions_group: 'Group Exhibitions',
+    exhibitions_empty: 'No exhibitions to show at this time.',
     contact_title: 'Contacts',
     contact_sub: 'For availability, prices, studio visits and commissions.',
     name: 'Your name',

@@ -2,6 +2,7 @@ import { localizedString, localizedText, localizedRichText } from './objects/loc
 import { artwork } from './artwork';
 import { series } from './series';
 import { about } from './about';
+import { exhibitions } from './exhibitions';
 import { siteSettings } from './siteSettings';
 
 export const schemaTypes = [
@@ -13,5 +14,6 @@ export const schemaTypes = [
   series,
   artwork,
   about,
+  exhibitions,
   siteSettings,
 ];

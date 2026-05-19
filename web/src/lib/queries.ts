@@ -38,3 +38,9 @@ export const aboutQuery = `
     stats, bibliography
   }
 `;
+
+export const exhibitionsQuery = `
+  *[_id == "exhibitions"][0] {
+    solo, group
+  }
+`;

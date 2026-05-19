@@ -54,6 +54,11 @@ export interface About {
   bibliography?: BibliographyEntry[];
 }
 
+export interface Exhibitions {
+  solo?: string[];
+  group?: string[];
+}
+
 export interface SiteEvent {
   title?: LocalizedString;
   date?: string;

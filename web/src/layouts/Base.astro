@@ -21,11 +21,15 @@ const currentPath = Astro.url.pathname;
 const altRoutes = routes[altLang];
 const curRoutes = routes[lang];
 
+// Normalize trailing slash so '/pt/sobre/' matches the route '/pt/sobre'.
+const stripSlash = (p: string) => (p.length > 1 ? p.replace(/\/$/, '') : p);
+const normalizedPath = stripSlash(currentPath);
 let altPath = currentPath;
-if (currentPath === curRoutes.home) altPath = altRoutes.home;
-else if (currentPath === curRoutes.about) altPath = altRoutes.about;
-else if (currentPath === curRoutes.contact) altPath = altRoutes.contact;
-else if (currentPath === curRoutes.terms) altPath = altRoutes.terms;
+if (normalizedPath === stripSlash(curRoutes.home)) altPath = altRoutes.home;
+else if (normalizedPath === curRoutes.about) altPath = altRoutes.about;
+else if (normalizedPath === curRoutes.exhibitions) altPath = altRoutes.exhibitions;
+else if (normalizedPath === curRoutes.contact) altPath = altRoutes.contact;
+else if (normalizedPath === curRoutes.terms) altPath = altRoutes.terms;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const canonical = `${siteUrl}${currentPath}`;

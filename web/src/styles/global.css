@@ -614,6 +614,65 @@ a.t:hover {
   font-size: 17px;
 }
 
+/* EXHIBITIONS */
+.exhibitions {
+  padding: 120px 40px;
+  border-top: 1px solid var(--line);
+  margin-top: 80px;
+}
+.exhibitions h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin: 0 0 48px;
+  line-height: 1.05;
+}
+.exh-block {
+  margin-top: 40px;
+  padding-top: 36px;
+  border-top: 1px solid var(--line);
+}
+.exh-block:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+.exh-section-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.exh-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.exh-list li {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--line-soft);
+  max-width: 64ch;
+}
+.exh-list li:last-child {
+  border-bottom: none;
+}
+.exh-empty {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
 /* CONTACT */
 .contact {
   padding: 120px 40px;
@@ -1015,6 +1074,7 @@ body.grid-airy .grid { grid-template-columns: repeat(2, 1fr); gap: 48px 40px; ma
   .about { padding: 80px 22px; }
   .about-top { grid-template-columns: 1fr; gap: 40px; }
   .about-stats { grid-template-columns: 1fr 1fr; }
+  .exhibitions { padding: 80px 22px; }
   .contact { grid-template-columns: 1fr; gap: 40px; padding: 80px 22px; }
   .modal { grid-template-columns: 1fr; height: calc(100vh - 24px); width: calc(100vw - 24px); grid-template-rows: 45vh 1fr; }
   .modal-body { padding: 32px 28px; }
