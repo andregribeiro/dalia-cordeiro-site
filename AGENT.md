@@ -92,7 +92,7 @@ dalia-cordeiro-site/
 │       │   ├── index.astro             # Root redirect (Accept-Language)
 │       │   ├── 404.astro               # Bilingual 404 (CF Pages serves as fallback)
 │       │   ├── pt/{index,sobre,contacto,termos}.astro
-│       │   └── en/{index,about,contact,terms}.astro
+│       │   └── en/{index,about,exhibitions,contact,terms}.astro
 │       └── styles/{global,fonts}.css
 │
 ├── functions/                          # CF Pages Functions (repo root, NOT inside web/)
@@ -105,6 +105,7 @@ dalia-cordeiro-site/
 │       ├── artwork.ts
 │       ├── series.ts                   # Series document (orderRank, drag-to-reorder)
 │       ├── about.ts                    # Singleton
+│       ├── exhibitions.ts              # Singleton (solo + group string arrays, no i18n)
 │       ├── siteSettings.ts             # Singleton
 │       └── objects/localizedString.ts  # localizedString/Text/RichText
 │
@@ -134,23 +135,25 @@ dalia-cordeiro-site/
 ## i18n Conventions
 
 - Two languages: `pt` (default) and `en`.
-- Routes: `/pt/`, `/pt/sobre`, `/pt/contacto` ↔ `/en/`, `/en/about`, `/en/contact`.
+- Routes: `/pt/`, `/pt/sobre`, `/pt/exposicoes`, `/pt/contacto` ↔ `/en/`, `/en/about`, `/en/exhibitions`, `/en/contact`.
 - Route map: `web/src/lib/i18n.ts` → `routes` object.
 - UI strings: static dict in `i18n.ts` → `ui` object. Use `t(lang, key)`.
 - CMS fields: `localizedString` / `localizedText` objects with `{pt, en}` sub-fields.
 - Resolve localized fields with `loc(field, lang)` from `web/src/lib/helpers.ts`. Always falls back to PT.
 - Series are a Sanity document type (`series`) with `orderRank` for drag-to-reorder. Artwork references a series via an **optional** `series` reference field — works without one are "standalone" and surface in a dedicated filter group in `WorkGrid.tsx`.
-- hreflang alternates on every page via `Base.astro`. `x-default` → `/pt/`.
+- hreflang alternates on every page via `Base.astro`. `x-default` → `/pt/`. **Both `Base.astro` and `Header.astro` strip the trailing slash from `Astro.url.pathname` before matching against the route map** — Astro emits `/pt/sobre/` with a trailing slash but `routes` is declared without one, so the comparison would otherwise fail silently and point the alternate / lang switcher back to the home page. Keep the `stripSlash` helper if you touch that logic.
+- The `exhibitions` document is **intentionally not localized**: the section headers (`Exposições` / `Exhibitions`, `Individuais` / `Solo`, `Coletivas` / `Group`) come from `i18n.ts`, but each exhibition line is a plain string shared by both languages (artist edits one list, both pages render it).
 
 ---
 
 ## Sanity Schema Patterns
 
-- **Singletons**: `about` and `siteSettings` use fixed `_id` (same as type name). Configured in `sanity.config.ts` to prevent duplicate creation and hide delete action.
+- **Singletons**: `about`, `exhibitions`, and `siteSettings` use fixed `_id` (same as type name). Configured in `sanity.config.ts` to prevent duplicate creation and hide delete action.
 - **Localized fields**: use custom object types `localizedString`, `localizedText`, `localizedRichText` (see `studio/schemas/objects/localizedString.ts`).
-- **`@sanity/language-filter`** plugin shows PT/EN tabs in Studio.
+- **`@sanity/language-filter`** plugin shows PT/EN tabs in Studio. Only applied to `artwork`, `about`, `siteSettings`; `exhibitions` is excluded because its fields are intentionally not localized.
 - **Field labels in Portuguese** (e.g., "Titulo", "Tecnica", "Dimensoes") — the artist edits in PT.
-- `siteSettings` holds `heroHeadline`, `heroIntro`, and `heroArtwork` so the artist can edit hero image + text without code changes. `heroIntro` has **no hardcoded fallback** — if unset in Studio, the homepage simply omits the intro paragraph.
+- `siteSettings` holds `heroHeadline`, `heroIntro`, and `heroImage` so the artist can edit hero image + text without code changes. `heroImage` is a **standalone `image` field** (hotspot + localized `alt`), **decoupled from the artwork catalog** — the artist uploads any picture, it is not a reference to an artwork. `heroIntro` has **no hardcoded fallback** — if unset in Studio, the homepage simply omits the intro paragraph.
+- The legacy `heroArtwork` field (reference → artwork) was removed in May 2026. The orphan data may persist in the production `siteSettings` document but is no longer read by any query; do not reintroduce it.
 
 ---
 
@@ -238,7 +241,7 @@ DNS (`www` and apex CNAME → `dalia-cordeiro-site.pages.dev`) and the apex-redi
 
 **To put the site live** (when the artist signs off):
 
-1. In Studio, confirm Site Settings has `heroHeadline`, `heroIntro`, and `heroArtwork` filled for both PT and EN. `heroIntro` no longer has a hardcoded fallback — if empty, the homepage renders without the intro paragraph.
+1. In Studio, confirm Site Settings has `heroHeadline`, `heroIntro`, and `heroImage` filled (PT + EN where applicable). `heroIntro` has no hardcoded fallback — if empty, the homepage renders without the intro paragraph. `heroImage` is a standalone image upload, not a reference to an artwork; the hero is hidden if it's empty.
 2. Cloudflare → Pages → `dalia-cordeiro-site` → Settings → Builds & deployments → change **Production branch** to `main` → Save.
 3. Deployments tab → find the latest `main` deployment → "..." → **Retry deployment** (promotes it to production). Alternatively push any trivial commit to `main`.
 4. Verify with `curl -sI https://www.daliacordeiroart.com | head -5` — expect a normal `200`, no `cache-control: no-store`, no `x-robots-tag: noindex, nofollow`.
