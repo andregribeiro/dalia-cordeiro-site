@@ -16,7 +16,7 @@ const lang = 'pt' as const;
 const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
 const artworks = await client.fetch<Artwork[]>(allArtworksQuery);
 
-const description = 'Pintora — Porto, Portugal';
+const description = 'Pintora — Óleo, acrílico e técnica mista.';
 
 const seoSrc = settings?.defaultSeoImage ?? settings?.heroImage;
 const ogImage = seoSrc ? urlFor(seoSrc).width(1200).auto('format').url() : undefined;

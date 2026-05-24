@@ -290,16 +290,6 @@ async function main() {
       en: 'Bodies that refuse to stay put.',
     },
     // heroImage is set manually in Studio (decoupled from artwork catalog).
-    tagline: {
-      _type: 'localizedString',
-      pt: 'Pintora — Porto, Portugal',
-      en: 'Painter — Porto, Portugal',
-    },
-    studioLocation: {
-      _type: 'localizedString',
-      pt: 'Atelier — Porto, Portugal',
-      en: 'Studio — Porto, Portugal',
-    },
     contactEmail: 'studio@daliacordeiroart.com',
     instagramUrl: 'https://www.instagram.com/dalia_cordeiro_art/',
     footerText: {

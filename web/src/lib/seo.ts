@@ -13,12 +13,11 @@ const ARTIST = {
   name: 'Dália Cordeiro',
   jobTitle: { pt: 'Pintora', en: 'Painter' },
   description: {
-    pt: 'Pintora portuguesa, nascida em Barreiro em 1955. Trabalha entre óleo, pastel e técnica mista.',
-    en: 'Portuguese painter, born in Barreiro in 1955. Working in oil, pastel and mixed media.',
+    pt: 'Pintora portuguesa, nascida no Barreiro em 1955. Trabalha com óleo, acrílico e técnica mista.',
+    en: 'Portuguese painter, born in Barreiro in 1955. Working in oil, acrylic and mixed media.',
   },
   birthPlace: 'Barreiro, Portugal',
   birthYear: 1955,
-  workLocation: 'Porto, Portugal',
   sameAs: ['https://www.instagram.com/dalia_cordeiro_art/'],
   email: 'studio@daliacordeiroart.com',
 };
@@ -38,7 +37,6 @@ export function personJsonLd(
     jobTitle: ARTIST.jobTitle[lang],
     description: ARTIST.description[lang],
     birthPlace: { '@type': 'Place', name: ARTIST.birthPlace },
-    workLocation: { '@type': 'Place', name: ARTIST.workLocation },
     email: `mailto:${ARTIST.email}`,
     sameAs: ARTIST.sameAs,
   };

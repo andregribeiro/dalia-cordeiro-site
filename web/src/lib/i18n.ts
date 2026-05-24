@@ -42,7 +42,6 @@ export const ui = {
     send: 'Enviar pedido',
     inquiry_for: 'Pedido para',
     sent: 'Obrigada — mensagem enviada.',
-    footer_studio: 'Atelier — Porto, Portugal',
     footer_rights: '© 2026 Dália Cordeiro. Todas as obras © a artista.',
   },
   en: {
@@ -78,7 +77,6 @@ export const ui = {
     send: 'Send inquiry',
     inquiry_for: 'Inquiry for',
     sent: 'Thank you — message sent.',
-    footer_studio: 'Studio — Porto, Portugal',
     footer_rights: '© 2026 Dália Cordeiro. All works © the artist.',
   },
 } as const;
